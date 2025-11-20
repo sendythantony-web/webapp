@@ -1,13 +1,8 @@
 {
-  "functions": {
-    "api/server.js": {
-      "runtime": "nodejs20.x"
-    }
-  },
   "rewrites": [
     {
       "source": "/server/outages",
-      "destination": "/api/server/outages"
+      "destination": "/api/outages/outages"
     }
   ]
 }
