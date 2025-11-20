@@ -283,7 +283,7 @@
             try {
                 // The backend call remains the same, but client-side filtering logic below ensures only A/U are rendered/kept
                 //const response = await fetch('http://localhost:3000/api/outages'); 
-                const response = await fetch('/server/outages');
+                const response = await fetch('/api/server/outages')
                 if (!response.ok) {
                     throw new Error(`Server returned status: ${response.status}`);
                 }
