@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mauritius Electricity Outages</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      color: white;
+    }
+    
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+    
+    .filters {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .filter-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.95rem;
+    }
+    
+    .filter-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .filter-btn.active {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .filter-btn[data-filter="all"] {
+      background: #667eea;
+      color: white;
+    }
+    
+    .filter-btn[data-filter="all"]:not(.active) {
+      background: #e5e7eb;
+      color: #4b5563;
+    }
+    
+    .filter-btn[data-filter="active"] {
+      background: #ef4444;
+      color: white;
+    }
+    
+    .filter-btn[data-filter="active"]:not(.active) {
+      background: #e5e7eb;
+      color: #4b5563;
+    }
+    
+    .filter-btn[data-filter="upcoming"] {
+      background: #eab308;
+      color: white;
+    }
+    
+    .filter-btn[data-filter="upcoming"]:not(.active) {
+      background: #e5e7eb;
+      color: #4b5563;
+    }
+    
+    .filter-btn[data-filter="past"] {
+      background: #22c55e;
+      color: white;
+    }
+    
+    .filter-btn[data-filter="past"]:not(.active) {
+      background: #e5e7eb;
+      color: #4b5563;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+      display: flex;
+      gap: 16px;
+    }
+    
+    .card:hover {
+      box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+    }
+    
+    .card.hidden {
+      display: none;
+    }
+    
+    .status-light {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 4px;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .status-light.active {
+      background: #ef4444;
+      box-shadow: 0 0 10px #ef4444;
+    }
+    
+    .status-light.upcoming {
+      background: #eab308;
+      box-shadow: 0 0 10px #eab308;
+    }
+    
+    .status-light.past {
+      background: #22c55e;
+      box-shadow: 0 0 10px #22c55e;
+    }
+    
+    .card-content {
+      flex: 1;
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .locality {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f2937;
+      text-transform: capitalize;
+    }
+    
+    .status-badge {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    
+    .status-badge.active {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    
+    .status-badge.upcoming {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    
+    .status-badge.past {
+      background: #dcfce7;
+      color: #166534;
+    }
+    
+    .info-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: #4b5563;
+      font-size: 0.95rem;
+      align-items: flex-start;
+    }
+    
+    .icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    
+    .loading, .error, .empty {
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #e5e7eb;
+      border-top-color: #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .error {
+      background: #fee2e2;
+      border: 2px solid #f87171;
+      color: #991b1b;
+    }
+    
+    #outages-container.empty-state::after {
+      content: 'No outages found for this filter.';
+      display: block;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      text-align: center;
+      color: #6b7280;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>⚡ Mauritius Electricity Outages</h1>
+      <p>Real-time tracking of scheduled power cuts</p>
+    </div>
+    
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">All (<span id="count-all">0</span>)</button>
+      <button class="filter-btn" data-filter="active">Active</button>
+      <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+      <button class="filter-btn" data-filter="past">Past</button>
+    </div>
+    
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Loading outage data...</p>
+    </div>
+    
+    <div id="error" class="error" style="display: none;">
+      <h2>⚠️ Error</h2>
+      <p id="error-message"></p>
+    </div>
+    
+    <div id="outages-container"></div>
+  </div>
+
+  <script>
+    let allOutages = [];
+    let currentFilter = 'all';
+
+    // Fetch and display outages
+    async function fetchOutages() {
+      try {
+        const response = await fetch('https://raw.githubusercontent.com/MrSunshyne/mauritius-dataset-electricity/main/data/power-outages.json');
+        const data = await response.json();
+        
+        // Flatten all districts into single array
+        allOutages = Object.values(data).flat();
+        
+        // Sort by date
+        allOutages.sort((a, b) => new Date(a.from) - new Date(b.from));
+        
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('count-all').textContent = allOutages.length;
+        
+        renderOutages();
+        
+        // Update times every minute
+        setInterval(updateAllTimes, 60000);
+      } catch (err) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('error-message').textContent = 'Failed to load outage data';
+      }
+    }
+
+    function getOutageStatus(outage) {
+      const now = new Date();
+      const from = new Date(outage.from);
+      const to = new Date(outage.to);
+      
+      if (now < from) {
+        return 'upcoming';
+      } else if (now >= from && now <= to) {
+        return 'active';
+      } else {
+        return 'past';
+      }
+    }
+
+    function getTimeMessage(outage) {
+      const now = new Date();
+      const from = new Date(outage.from);
+      const to = new Date(outage.to);
+      
+      if (now < from) {
+        const diff = from - now;
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        return `Starts in ${hours}h ${minutes}m`;
+      } else if (now >= from && now <= to) {
+        const diff = to - now;
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        return `Ends in ${hours}h ${minutes}m`;
+      } else {
+        return 'Completed';
+      }
+    }
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleString('en-GB', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    function getDuration(outage) {
+      const from = new Date(outage.from);
+      const to = new Date(outage.to);
+      const diff = to - from;
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      return `${hours}h ${minutes}m`;
+    }
+
+    function createOutageCard(outage) {
+      const status = getOutageStatus(outage);
+      const timeMessage = getTimeMessage(outage);
+      
+      return `
+        <div class="card" data-id="${outage.id}" data-status="${status}">
+          <div class="status-light ${status}"></div>
+          <div class="card-content">
+            <div class="card-header">
+              <h3 class="locality">${outage.locality}</h3>
+              <span class="status-badge ${status}" data-time-message>${timeMessage}</span>
+            </div>
+            
+            <div class="info-row">
+              <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              <span>${outage.streets}</span>
+            </div>
+            
+            <div class="info-row">
+              <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+              <span>${formatDate(outage.from)}</span>
+            </div>
+            
+            <div class="info-row">
+              <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span>Duration: ${getDuration(outage)}</span>
+            </div>
+            
+            <div class="info-row">
+              <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span style="text-transform: capitalize">District: ${outage.district}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderOutages() {
+      const container = document.getElementById('outages-container');
+      container.innerHTML = allOutages.map(outage => createOutageCard(outage)).join('');
+      
+      applyFilter(currentFilter);
+    }
+
+    function applyFilter(filter) {
+      currentFilter = filter;
+      const cards = document.querySelectorAll('.card');
+      let visibleCount = 0;
+      
+      cards.forEach(card => {
+        const status = card.dataset.status;
+        
+        if (filter === 'all' || status === filter) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      
+      // Update filter buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.dataset.filter === filter) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      
+      // Show/hide empty state
+      const container = document.getElementById('outages-container');
+      if (visibleCount === 0) {
+        container.classList.add('empty-state');
+      } else {
+        container.classList.remove('empty-state');
+      }
+    }
+
+    function updateAllTimes() {
+      allOutages.forEach(outage => {
+        const card = document.querySelector(`[data-id="${outage.id}"]`);
+        if (!card) return;
+        
+        const newStatus = getOutageStatus(outage);
+        const timeMessage = getTimeMessage(outage);
+        
+        // Update status
+        card.dataset.status = newStatus;
+        
+        // Update light
+        const light = card.querySelector('.status-light');
+        light.className = `status-light ${newStatus}`;
+        
+        // Update badge
+        const badge = card.querySelector('[data-time-message]');
+        badge.className = `status-badge ${newStatus}`;
+        badge.textContent = timeMessage;
+      });
+      
+      applyFilter(currentFilter);
+    }
+
+    // Event listeners
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        applyFilter(btn.dataset.filter);
+      });
+    });
+
+    // Initialize
+    fetchOutages();
+  </script>
+</body>
+</html>
