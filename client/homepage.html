@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mauritius Power Awareness Hub</title>
+  <style>
+    :root {
+      /* Typography + shared vars */
+      --app-font-family: "Arial", sans-serif;
+      --app-base-font-size: 18px;
+      --safety-orange: #ff8c00;
+    }
+
+    html {
+      font-size: calc(var(--app-base-font-size) * 1.00);
+      font-family: var(--app-font-family);
+    }
+
+    body {
+      margin: 0;
+      background: #f4f6fb;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    /* =============================== HEADER / NAV ============================== */
+    header {
+      background-color: #1e2a38;
+      border-bottom: 4px solid var(--safety-orange);
+      padding: 20px 0;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      font-size: 16px; /* Force same base size as education page header */
+    }
+
+    .header-content {
+      width: 90%;
+      max-width: 1000px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-section {
+      display: flex;
+      flex-direction: column;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8em;
+      color: #ffffff;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tagline {
+      color: #aab7c4;
+      font-size: 0.85em;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    nav a {
+      color: #e0e6ed;
+      background: rgba(255,255,255,0.05);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.9em;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+    }
+
+    nav a:hover {
+      background: rgba(255, 140, 0, 0.15);
+      color: var(--safety-orange);
+      border-color: var(--safety-orange);
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+      }
+      nav {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+    }
+
+    /* =============================== PAGE CONTENT ============================== */
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 30px auto 60px auto;
+    }
+
+    h1, h2, h3 {
+      color: #0f172a;
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    /* Intro / awareness */
+    .hero {
+      background: #e0f2fe;
+      padding: 25px 20px;
+      border-radius: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
+    }
+
+    .hero-subtitle {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #1d4ed8;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .hero p {
+      margin-top: 0;
+      font-size: 1rem;
+    }
+
+    section {
+      margin-top: 40px;
+    }
+
+    /* Fun Facts wrapper (used for both flashcard sections) */
+    .funfacts-wrapper {
+      background: #eef4ff;
+      padding: 30px 25px;
+      border-radius: 18px;
+      margin-top: 40px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .funfacts-wrapper > *:not(.bolt-layer) {
+      position: relative;
+      z-index: 1;
+    }
+
+    .funfacts-wrapper h2 {
+      margin-bottom: 8px;
+    }
+
+    .funfacts-wrapper .subtitle {
+      margin-top: 0;
+      margin-bottom: 25px;
+      color: #475569;
+      font-size: 1rem;
+    }
+
+    /* Lightning bolt background layer */
+    .bolt-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bolt {
+      position: absolute;
+      font-size: 15rem;
+      opacity: 0.4;
+      color: #60a5fa;
+      animation: boltFall linear infinite;
+    }
+
+    .bolt-1 { left: 8%;  animation-duration: 14s; animation-delay: 0s; }
+    .bolt-2 { left: 45%; animation-duration: 18s; animation-delay: 3s; }
+    .bolt-3 { left: 82%; animation-duration: 16s; animation-delay: 1.5s; }
+    .bolt-4 { left: 0%;  animation-duration: 16s; animation-delay: 1.5s; }
+
+    @keyframes boltFall {
+      0%   { transform: translateY(-150%); }
+      100% { transform: translateY(150%); }
+    }
+
+    /* Single-card layout */
+    .flashcards {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0px 4px 12px rgba(15,23,42,0.16);
+      cursor: pointer;
+      max-width: 520px;
+      width: 100%;
+      height: 280px;
+      padding: 24px 20px;
+      box-sizing: border-box;
+      text-align: center;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1000px;
+      background: rgba(255,255,255,0.96);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0px 10px 22px rgba(15,23,42,0.22);
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-inner.flipped { transform: rotateY(180deg); }
+
+    .card-face {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      backface-visibility: hidden;
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+      padding: 0 8px;
+      box-sizing: border-box;
+    }
+
+    .card-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 6px;
+      padding: 0 8px;
+      box-sizing: border-box;
+    }
+
+    .card-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px;
+      height: 72px;
+      border-radius: 999px;
+      background: #e0f2fe;
+      box-shadow: 0 3px 5px rgba(148, 163, 184, 0.5);
+      font-size: 2.6rem;
+      flex-shrink: 0;
+      transition: transform 0.15s ease;
+    }
+
+    .card:hover .card-icon { transform: scale(1.08); }
+
+    .card-title {
+      font-weight: 700;
+      color: #1e293b;
+      font-size: 1.3rem;
+    }
+
+    .card-text {
+      margin-top: 4px;
+      line-height: 1.6;
+      color: #374151;
+      font-size: 1.05rem;
+      text-align: center;
+    }
+
+    .flashcard-controls {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+      color: #4b5563;
+      text-align: center;
+    }
+
+    .wheel-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 18px;
+      min-width: 140px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #0f172a;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .wheel-btn:hover {
+      background: #111827;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(15,23,42,0.4);
+    }
+
+    #flashcard-indicator,
+    #importance-indicator {
+      text-align: center;
+    }
+
+    .flip-hint {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-top: 6px;
+    }
+
+    /* Learn more section */
+    .learn-more {
+      background: #e0f2fe;
+      margin-top: 40px;
+      padding: 25px 22px 30px;
+      border-radius: 18px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .learn-more h2 {
+      margin-bottom: 8px;
+    }
+
+    .learn-more p {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: #475569;
+      text-align: center;
+    }
+
+    .learn-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    @media (max-width: 720px) {
+      .learn-grid { grid-template-columns: 1fr; }
+    }
+
+    .learn-card {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(15,23,42,0.18);
+      min-height: 220px;
+      display: flex;
+      align-items: stretch;
+      justify-content: stretch;
+    }
+
+    .learn-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease, filter 0.4s ease;
+    }
+
+    .learn-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(15,23,42,0.8),
+        rgba(15,23,42,0.15)
+      );
+      opacity: 0.85;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .learn-card:hover img {
+      transform: scale(1.06);
+      filter: brightness(1.05);
+    }
+
+    .learn-card:hover::before {
+      opacity: 0.65;
+    }
+
+    .learn-content {
+      position: absolute;
+      inset: 0;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      color: #e5f0ff;
+      text-align: left;
+      pointer-events: none;
+    }
+
+    .learn-tag {
+      background: rgba(15,23,42,0.8);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      margin-bottom: 8px;
+    }
+
+    .learn-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .learn-text {
+      font-size: 0.9rem;
+      max-width: 22rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <div class="header-content">
+      <div class="logo-section">
+        <h1>⚡ EduPower</h1>
+        <div class="tagline">OUTAGES • EDUCATION • AWARENESS</div>
+      </div>
+
+      <nav>
+        <a href="#" onclick="scrollToSection('home'); return false;">Home</a>
+        <a href="#" onclick="goToOutages(); return false;">Outages</a>
+        <a href="#" onclick="goToEducation(); return false;">EduHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- HOMEPAGE SECTION -->
+    <section id="home">
+      <!-- Awareness / Hero -->
+      <div class="hero">
+        <div class="hero-subtitle">Mauritius • Electricity Outage Awareness</div>
+        <h1>Stay Informed, Stay Powered, Stay Safe ⚡</h1>
+        <p>
+          Hello there! This app allows anyone, anywhere in Mauritius to stay prepared for power cuts. 
+          Learn about outages and their use, how to save energy, and discover practical safety tips 
+          for your home.
+        </p>
+      </div>
+
+      <!-- Fun Facts Flashcard (Quizlet-style) -->
+      <section class="funfacts-wrapper">
+        <div class="bolt-layer">
+          <span class="bolt bolt-1">⚡</span>
+          <span class="bolt bolt-2">⚡</span>
+          <span class="bolt bolt-3">⚡</span>
+          <span class="bolt bolt-4">⚡</span>
+        </div>
+
+        <h2>Fun Facts</h2>
+        <p class="subtitle">
+          Explore quick, data-inspired facts about how power cuts are planned and managed in Mauritius.
+        </p>
+
+        <div id="flashcards" class="flashcards"></div>
+
+        <div class="flashcard-controls">
+          <button class="wheel-btn" onclick="prevFacts()" aria-label="Previous fact">
+            Previous Card
+          </button>
+          <span id="flashcard-indicator">Card 1 of 30</span>
+          <button class="wheel-btn" onclick="nextFacts()" aria-label="Next fact">
+            Next Card
+          </button>
+        </div>
+        <div class="flip-hint">Tap or click the card to flip it.</div>
+      </section>
+
+      <!-- Why Planned Outages Matter (Quizlet-style) -->
+      <section class="funfacts-wrapper">
+        <div class="bolt-layer">
+          <span class="bolt bolt-1">⚡</span>
+          <span class="bolt bolt-2">⚡</span>
+          <span class="bolt bolt-3">⚡</span>
+        </div>
+
+        <h2>Importance Of Planned Outages & Energy Conservation</h2>
+        <p class="subtitle">
+          Discover why scheduled power cuts and energy saving are important parts of keeping Mauritius safe, reliable, and ready for the future.
+        </p>
+
+        <div id="importance-cards" class="flashcards"></div>
+
+        <div class="flashcard-controls">
+          <button class="wheel-btn" onclick="prevImportance()" aria-label="Previous reason">
+            Previous Card
+          </button>
+          <span id="importance-indicator">Card 1 of 12</span>
+          <button class="wheel-btn" onclick="nextImportance()" aria-label="Next reason">
+            Next Card
+          </button>
+        </div>
+        <div class="flip-hint">Tap or click the card to flip it.</div>
+      </section>
+
+      <!-- Learn More Section -->
+      <section class="learn-more">
+        <h2 style="text-align:center;">Want to Learn More?</h2>
+        <p>
+          Dive deeper into real outage information or explore fun learning activities about electricity, safety, and saving energy.
+        </p>
+
+        <div class="learn-grid">
+          <div class="learn-card" onclick="goToOutages()" aria-label="Go to outages page">
+            <img src="powerOutage2.jpg" alt="Technicians working on power lines">
+            <div class="learn-content">
+              <div class="learn-tag">Outage Alerts &amp; Maps</div>
+              <div class="learn-title">Check Planned Outages</div>
+            </div>
+          </div>
+
+          <div class="learn-card" onclick="goToEducation()" aria-label="Go to education hub page">
+            <img src="energycons.jpg" alt="Children learning about wind energy and electricity">
+            <div class="learn-content">
+              <div class="learn-tag">Education Hub</div>
+              <div class="learn-title">Learn About Energy &amp; its Conservation</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </section>
+
+  </div>
+
+  <footer>
+    © 2025 Mauritius Power Awareness App • Helping households stay informed, safe, and energy smart.
+  </footer>
+
+  <script>
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+
+    // Placeholder navigation for future separate pages
+    function goToOutages() {
+      // window.location.href = "outages.html";
+      alert("Outages page coming soon.");
+    }
+
+    function goToEducation() {
+      // window.location.href = "education.html";
+      alert("Education hub coming soon.");
+    }
+
+    // ---- Utility: Fisher–Yates shuffle ----
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
+
+    // ---- Flashcard data: General outage facts ----
+    const facts = [
+      { icon: "⚡", title: "Planned, Not Random", text: "Most power cuts in Mauritius are planned ahead of time." },
+      { icon: "⏰", title: "Daytime Downtime", text: "Planned power outages usually happen during the daytime." },
+      { icon: "🛠️", title: "Maintenance Windows", text: "Maintenance outages often last between 5 and 8 hours." },
+      { icon: "📅", title: "Weekend Work", text: "Weekend outages are more common than many people expect." },
+      { icon: "🏘️", title: "Neighbourhood Focus", text: "Power cuts typically affect small neighbourhood clusters rather than whole towns." },
+      { icon: "📈", title: "Improving Reliability", text: "Many planned outages help improve long-term grid reliability." },
+      { icon: "🕓", title: "All-Day Jobs", text: "Some outages can last most of the day to allow for deep maintenance work." },
+      { icon: "🌅", title: "Early Start", text: "Outages often start in the early morning to give technicians a full workday." },
+      { icon: "🌇", title: "Back Before Evening", text: "Afternoon-ending outages are one of the most common patterns." },
+      { icon: "🚨", title: "Preventing Surprises", text: "Planned outages reduce the likelihood of sudden, unexpected blackouts." },
+      { icon: "🏠", title: "Homes in the Mix", text: "Residential areas frequently appear in maintenance schedules." },
+      { icon: "🏭", title: "Factories Too", text: "Industrial zones also receive regular planned electricity work." },
+      { icon: "🛣️", title: "Street-by-Street", text: "Some maintenance tasks target just a few streets or even a single lane." },
+      { icon: "🗺️", title: "Clustered Work", text: "Many outages appear grouped in the same district within a short timeframe." },
+      { icon: "⌛", title: "Buffer Time", text: "Some maintenance windows are longer than the actual time power is off." },
+      { icon: "⚙️", title: "Power Back Early", text: "Power can sometimes return earlier than scheduled during planned work." },
+      { icon: "🦺", title: "Safe Scheduling", text: "Longer outage windows give technicians flexibility to complete work safely." },
+      { icon: "🏗️", title: "Upgrade Zones", text: "Planned outages often target areas undergoing infrastructure upgrades." },
+      { icon: "👷", title: "Region by Region", text: "Utility crews typically work region by region to improve grid sections." },
+      { icon: "✂️", title: "Cutting Carefully", text: "Segmented outages help avoid cutting electricity to entire towns." },
+      { icon: "🤝", title: "Coordinated Upgrades", text: "Many outage entries show coordinated upgrades across neighbouring areas." },
+      { icon: "📏", title: "Different Durations", text: "Outage durations vary widely from short tasks to full-day operations." },
+      { icon: "🧭", title: "Localised Grid", text: "Street-by-street listings show a very localised grid structure." },
+      { icon: "🔋", title: "Transformer Care", text: "Some planned outages focus on transformer maintenance and safety checks." },
+      { icon: "🌙", title: "Low-Demand Hours", text: "Maintenance outages frequently align with low-demand hours." },
+      { icon: "🔥", title: "Preventing Overload", text: "Planned work helps prevent equipment overheating or overloads." },
+      { icon: "🔁", title: "Signs of Upgrades", text: "Repeated outages in an area often signal long-term improvements being installed." },
+      { icon: "🏚️", title: "Updating Old Gear", text: "Many outages target older infrastructure that requires periodic updates." },
+      { icon: "🛡️", title: "Fewer Breakdowns", text: "Planned maintenance is essential for reducing future breakdowns." },
+      { icon: "🌐", title: "Future-Proof Grid", text: "Outage patterns show a strong focus on safety, reliability, and future-proofing the grid." },
+      {
+        icon: "🗓️",
+        title: "Multi-Year Planning",
+        text: "The outage schedules stretch across several years, showing how carefully maintenance is planned in advance."
+      },
+      {
+        icon: "🌍",
+        title: "Island-Wide Coverage",
+        text: "Planned outages appear in every district of Mauritius, from coastal villages to busy towns."
+      },
+      {
+        icon: "🏝️",
+        title: "Rodrigues Included",
+        text: "Rodrigues features its own planned outages too, showing that even our Sister Island gets its own dedicated grid maintenance."
+      },
+      {
+        icon: "🧭",
+        title: "From 2022 to 2025",
+        text: "Sources show planned work from 2022 right up to 2025, giving a long-term picture of how the grid is cared for."
+      },
+      {
+        icon: "📊",
+        title: "Thousands of Entries",
+        text: "There are thousands of planned outage records, each one representing careful work on part of the network."
+      },
+      {
+        icon: "🗣️",
+        title: "Street-Level Details",
+        text: "Each outage lists specific streets and areas, so people can check if their exact lane is likely to be affected."
+      },
+      {
+        icon: "🏘️",
+        title: "“Les Environs” Matter",
+        text: "Many entries in outage alerts mention the ‘environs’ of certain streets, reminding households nearby that they may be included too."
+      },
+      {
+        icon: "📆",
+        title: "Week-Long Activity",
+        text: "Planned work occurs on every day of the week, not just on weekdays."
+      },
+      {
+        icon: "🌤️",
+        title: "Early-Day Windows",
+        text: "A lot of outages start in the very early hours or in the morning, using cooler, lower-demand times for maintenance."
+      },
+      {
+        icon: "🧩",
+        title: "Phased Upgrades",
+        text: "Some areas appear several times across the years, hinting at staged upgrades rather than one-off works."
+      } 
+    ];
+
+    let currentFactIndex = 0;
+    let factFlipped = false;
+
+    let factCardInner, factFrontIcon, factFrontTitle, factBackText;
+
+    function initFactCard() {
+      const container = document.getElementById("flashcards");
+      container.innerHTML = "";
+
+      const card = document.createElement("div");
+      card.className = "card";
+      card.setAttribute("role", "button");
+      card.setAttribute("tabindex", "0");
+      card.setAttribute("aria-label", "Flashcard, tap to flip");
+
+      const inner = document.createElement("div");
+      inner.className = "card-inner";
+
+      const front = document.createElement("div");
+      front.className = "card-face card-front";
+
+      const header = document.createElement("div");
+      header.className = "card-header";
+
+      const icon = document.createElement("span");
+      icon.className = "card-icon";
+
+      const title = document.createElement("div");
+      title.className = "card-title";
+
+      header.appendChild(icon);
+      header.appendChild(title);
+      front.appendChild(header);
+
+      const back = document.createElement("div");
+      back.className = "card-face card-back";
+
+      const text = document.createElement("div");
+      text.className = "card-text";
+      back.appendChild(text);
+
+      inner.appendChild(front);
+      inner.appendChild(back);
+      card.appendChild(inner);
+      container.appendChild(card);
+
+      factCardInner = inner;
+      factFrontIcon = icon;
+      factFrontTitle = title;
+      factBackText = text;
+
+      const toggleFlip = () => {
+        factFlipped = !factFlipped;
+        updateFactFlipState();
+      };
+
+      card.addEventListener("click", toggleFlip);
+      card.addEventListener("keypress", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggleFlip();
+        }
+      });
+    }
+
+    function updateFactFlipState() {
+      if (!factCardInner) return;
+      factCardInner.classList.toggle("flipped", factFlipped);
+    }
+
+    function renderFactCardContent() {
+      const indicator = document.getElementById("flashcard-indicator");
+      const fact = facts[currentFactIndex];
+
+      factFrontIcon.textContent = fact.icon;
+      factFrontTitle.textContent = fact.title;
+      factBackText.textContent = fact.text;
+
+      const cardNumber = currentFactIndex + 1;
+      indicator.textContent = "Card " + cardNumber + " of " + facts.length;
+
+      updateFactFlipState();
+    }
+
+    function nextFacts() {
+      currentFactIndex = (currentFactIndex + 1) % facts.length;
+      factFlipped = false;
+      renderFactCardContent();
+    }
+
+    function prevFacts() {
+      currentFactIndex = (currentFactIndex - 1 + facts.length) % facts.length;
+      factFlipped = false;
+      renderFactCardContent();
+    }
+
+    // ---- Importance flashcards ----
+    const importanceFacts = [
+      { icon: "🛡️", title: "Safety First", text: "Planned outages let crews work on high-voltage equipment safely without live power." },
+      { icon: "🛠️", title: "Fixing Problems Early", text: "Maintenance during outages helps fix small issues before they become big breakdowns." },
+      { icon: "🚨", title: "Preventing Blackouts", text: "Short, planned cuts greatly reduce the risk of long, unexpected blackouts." },
+      { icon: "✅", title: "More Reliable Supply", text: "By repairing and upgrading the network, planned outages make electricity more reliable." },
+      { icon: "🌱", title: "Ready for Renewables", text: "Grid upgrades done during outages help connect more solar and other clean energy sources." },
+      { icon: "⚙️", title: "Stronger Infrastructure", text: "Replacing aging cables and equipment keeps the electricity system strong for years to come." },
+      { icon: "🔥", title: "Lower Fire Risk", text: "Checking and tightening connections during outages helps prevent overheating and fires." },
+      { icon: "🧪", title: "Testing Backups", text: "Planned cuts give teams a chance to test backup lines and equipment under real conditions." },
+      { icon: "📐", title: "Better Power Quality", text: "Upgrades during outages can improve voltage stability and reduce flickering lights." },
+      { icon: "💰", title: "Saving Money Long-Term", text: "Preventive maintenance is cheaper than emergency repairs after a major failure." },
+      { icon: "🌙", title: "Less Disruption Overall", text: "When outages are scheduled, they can be planned for low-demand times to reduce impact." },
+      { icon: "🏠", title: "Time to Prepare", text: "Knowing about a planned outage gives households time to charge devices and prepare safely." },
+      { icon: "💡", title: "Promoting Energy Awareness", text: "Knowing that outages are planned encourages families to think about how much electricity they really use each day." },
+      { icon: "🔌", title: "Turning Off the Extras", text: "Before a planned cut, households often switch off non-essential appliances, which builds good energy-saving habits." },
+      { icon: "📚", title: "Teaching Moments", text: "Planned outages create chances for parents and teachers to explain how the grid works and why saving energy matters." },
+      { icon: "🔋", title: "Smart Use of Batteries", text: "When people know a cut is coming, they charge power banks and use them wisely, learning to manage limited energy." },
+      { icon: "🍽️", title: "Reducing Food Waste", text: "Households who plan ahead open fridges less during outages, which protects food and reduces waste." },
+      { icon: "🌞", title: "Encouraging Solar & Backup", text: "Regular planned outages can motivate families and businesses to explore solar, inverters, and other cleaner backup options." },
+      { icon: "📲", title: "Using Digital Tools", text: "Outage schedules encourage people to follow alerts and apps, making them more informed about their own energy supply." },
+      { icon: "🧺", title: "Planning High-Use Tasks", text: "Knowing the timetable helps households plan heavy-use activities like ironing or laundry at better times." },
+      { icon: "♻️", title: "Thinking About Waste", text: "Living with planned cuts reminds everyone that energy isn’t infinite and should be used carefully and respectfully." },
+      { icon: "🏫", title: "Community Preparedness", text: "Schools and community centres can use planned outages to practise blackout plans and teach safety and energy saving together." },
+      { icon: "🛡️", title: "Protecting Appliances", text: "When people know an outage is coming, they can unplug sensitive devices and use surge protection, extending appliance life." },
+      { icon: "🤝", title: "Fair Sharing of Downtime", text: "Planned outages are spread across many regions, helping ensure that maintenance and downtime are shared more fairly." }
+    ];
+
+    let currentImportanceIndex = 0;
+    let importanceFlipped = false;
+
+    let importanceCardInner, importanceFrontIcon, importanceFrontTitle, importanceBackText;
+
+    function initImportanceCard() {
+      const container = document.getElementById("importance-cards");
+      container.innerHTML = "";
+
+      const card = document.createElement("div");
+      card.className = "card";
+      card.setAttribute("role", "button");
+      card.setAttribute("tabindex", "0");
+      card.setAttribute("aria-label", "Flashcard, tap to flip");
+
+      const inner = document.createElement("div");
+      inner.className = "card-inner";
+
+      const front = document.createElement("div");
+      front.className = "card-face card-front";
+
+      const header = document.createElement("div");
+      header.className = "card-header";
+
+      const icon = document.createElement("span");
+      icon.className = "card-icon";
+
+      const title = document.createElement("div");
+      title.className = "card-title";
+
+      header.appendChild(icon);
+      header.appendChild(title);
+      front.appendChild(header);
+
+      const back = document.createElement("div");
+      back.className = "card-face card-back";
+
+      const text = document.createElement("div");
+      text.className = "card-text";
+      back.appendChild(text);
+
+      inner.appendChild(front);
+      inner.appendChild(back);
+      card.appendChild(inner);
+      container.appendChild(card);
+
+      importanceCardInner = inner;
+      importanceFrontIcon = icon;
+      importanceFrontTitle = title;
+      importanceBackText = text;
+
+      const toggleFlip = () => {
+        importanceFlipped = !importanceFlipped;
+        updateImportanceFlipState();
+      };
+
+      card.addEventListener("click", toggleFlip);
+      card.addEventListener("keypress", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggleFlip();
+        }
+      });
+    }
+
+    function updateImportanceFlipState() {
+      if (!importanceCardInner) return;
+      importanceCardInner.classList.toggle("flipped", importanceFlipped);
+    }
+
+    function renderImportanceCardContent() {
+      const indicator = document.getElementById("importance-indicator");
+      const fact = importanceFacts[currentImportanceIndex];
+
+      importanceFrontIcon.textContent = fact.icon;
+      importanceFrontTitle.textContent = fact.title;
+      importanceBackText.textContent = fact.text;
+
+      const cardNumber = currentImportanceIndex + 1;
+      indicator.textContent = "Card " + cardNumber + " of " + importanceFacts.length;
+
+      updateImportanceFlipState();
+    }
+
+    function nextImportance() {
+      currentImportanceIndex = (currentImportanceIndex + 1) % importanceFacts.length;
+      importanceFlipped = false;
+      renderImportanceCardContent();
+    }
+
+    function prevImportance() {
+      currentImportanceIndex =
+        (currentImportanceIndex - 1 + importanceFacts.length) % importanceFacts.length;
+      importanceFlipped = false;
+      renderImportanceCardContent();
+    }
+
+    // Initial setup
+    shuffleArray(facts);
+    shuffleArray(importanceFacts);
+
+    initFactCard();
+    initImportanceCard();
+    renderFactCardContent();
+    renderImportanceCardContent();
+  </script>
+
+</body>
+</html>
