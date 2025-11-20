@@ -11,75 +11,76 @@
 
         /* =============================== HEADER ============================== */
         header {
-          background-color: #1e2a38;
-          border-bottom: 4px solid var(--safety-orange);
-          padding: 20px 0;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-          position: sticky;
-          top: 0;
-          z-index: 999;
+            background-color: #1e2a38;
+            border-bottom: 4px solid var(--safety-orange);
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 999;
         }
 
         .header-content {
-          width: 90%;
-          max-width: 1000px;
-          margin: auto;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
+            width: 90%;
+            max-width: 1000px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         @media (max-width: 768px) {
-          .header-content { flex-direction: column; text-align: center; gap: 15px; }
-          nav { width: 100%; justify-content: center; }
+            .header-content { flex-direction: column; text-align: center; gap: 15px; }
+            nav { width: 100%; justify-content: center; }
         }
 
         .logo-section {
-          display: flex;
-          flex-direction: column;
+            display: flex;
+            flex-direction: column;
         }
 
         header h1 {
-          font-size: 1.8em;
-          color: #ffffff;
-          font-weight: 700;
-          letter-spacing: 0.5px;
-          display: flex;
-          align-items: center;
-          gap: 10px;
+            font-size: 1.8em;
+            color: #ffffff;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
         }
 
         .tagline {
-          color: #aab7c4;
-          font-size: 0.85em;
-          text-transform: uppercase;
-          letter-spacing: 1.5px;
-          margin-top: 4px;
-          font-weight: 500;
+            color: #aab7c4;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 4px;
+            font-weight: 500;
         }
 
         nav {
-          display: flex;
-          gap: 10px;
+            display: flex;
+            gap: 10px;
         }
 
         nav a {
-          color: #e0e6ed;
-          background: rgba(255,255,255,0.05);
-          padding: 10px 20px;
-          border-radius: 8px;
-          font-size: 0.9em;
-          font-weight: 600;
-          text-decoration: none;
-          transition: all 0.3s ease;
-          border: 1px solid transparent;
+            color: #e0e6ed;
+            background: rgba(255,255,255,0.05);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
         }
 
         nav a:hover {
-          background: rgba(255, 140, 0, 0.15);
-          color: var(--safety-orange);
-          border-color: var(--safety-orange);
-          transform: translateY(-2px);
+            background: rgba(255, 140, 0, 0.15);
+            color: var(--safety-orange);
+            border-color: var(--safety-orange);
+            transform: translateY(-2px);
         }
 
         /* =============================== PAGE BASE ============================== */
@@ -91,7 +92,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #7884bc 0%, #578db9 100%);
             min-height: 100vh;
             padding: 0;
         }
@@ -100,6 +101,7 @@
             max-width: 900px;
             margin: 0 auto;
             padding-top: 60px;
+            padding-bottom: 100px; /* Extra space for chatbot */
         }
 
         .header-block {
@@ -310,6 +312,156 @@
         .severity-low { background: #fefce8; color: #854d0e; border: 2px solid #fde047; }
         .severity-medium { background: #fff7ed; color: #9a3412; border: 2px solid #fdba74; }
         .severity-high { background: #fef2f2; color: #991b1b; border: 2px solid #fca5a5; }
+
+        /* --- CHATBOT STYLES --- */
+        #chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        #chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #6366f1;
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            cursor: pointer;
+            font-size: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+
+        #chatbot-toggle:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        #chatbot-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px);
+        }
+
+        #chatbot-window.visible {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+        }
+
+        .chat-header {
+            background: #6366f1;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        #chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        #chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #f9fafb;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .message.ai {
+            background: #e0e7ff;
+            color: #1f2937;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .message.user {
+            background: #6366f1;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 8px;
+            background: white;
+        }
+
+        #chat-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        #chat-input:focus {
+            border-color: #6366f1;
+        }
+
+        #chat-send {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        #chat-send:disabled {
+            background: #a5b4fc;
+            cursor: not-allowed;
+        }
+        
+        .typing-indicator {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-left: 10px;
+            margin-bottom: 5px;
+            display: none;
+        }
     </style>
 </head>
 
@@ -317,14 +469,14 @@
     <header>
         <div class="header-content">
             <div class="logo-section">
-                <h1>⚡ Mauritius Outages</h1>
-                <div class="tagline">Education & Awareness</div>
+                <h1>💡 EduPower</h1>
+                <div class="tagline">EDUCATION • AWARENESS • SAFETY</div>
             </div>
 
             <nav>
                 <a href="#">Home</a>
-                <a href="#">About</a>
-                <a href="#">Contact</a>
+                <a href="outage.html">Outage Status</a>
+                <a href="#">Education Hub</a>
             </nav>
         </div>
     </header>
@@ -354,7 +506,36 @@
         <div id="outages-container"></div>
     </div>
 
+    <!-- Chatbot UI -->
+    <div id="chatbot-container">
+        <button id="chatbot-toggle">🌱</button>
+        <div id="chatbot-window">
+            <div class="chat-header">
+                <h3>Energy Saver AI</h3>
+                <button id="chatbot-close">×</button>
+            </div>
+            <div id="chat-messages">
+                <div class="message ai">Hello! I'm your energy assistant. Ask me how to save power or what to do during an outage!</div>
+            </div>
+            <div class="typing-indicator" id="typing-indicator">AI is typing...</div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Ask about energy tips...">
+                <button id="chat-send">Send</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // ==========================================
+        // ⚙️ CONFIGURATION
+        // ==========================================
+        // I have updated this to your Render URL so it works on Mobile
+        const API_URL = 'https://testdeploy-ixhj.onrender.com/api/outages'; 
+        
+        // 🔥 PASTE YOUR API KEY HERE
+        const apiKey = "AIzaSyD1VMF-OsPLJWYbn8oNxE7QXmDhrjhrB8Q"; 
+        // ==========================================
+
         let allOutages = [];
         let currentFilter = 'active';
         
@@ -375,8 +556,8 @@
         // Fetch and display outages
         async function fetchOutages() {
             try {
-                // Using your local backend
-                const response = await fetch('http://localhost:3000/api/outages'); 
+                // Use the Render URL variable to ensure mobile access works
+                const response = await fetch(API_URL); 
                 
                 if (!response.ok) {
                     throw new Error(`Server returned status: ${response.status}`);
@@ -403,7 +584,7 @@
             } catch (err) {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('error').style.display = 'block';
-                document.getElementById('error-message').textContent = 'Failed to load outage data. Ensure your local server is running.';
+                document.getElementById('error-message').textContent = 'Failed to load outage data. Ensure your backend is running.';
                 console.error(err);
             }
         }
@@ -634,6 +815,107 @@
                 render();
             });
         });
+        
+        // --- CHATBOT LOGIC ---
+        const toggleBtn = document.getElementById('chatbot-toggle');
+        const chatWindow = document.getElementById('chatbot-window');
+        const closeBtn = document.getElementById('chatbot-close');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('chat-send');
+        const messagesContainer = document.getElementById('chat-messages');
+        const typingIndicator = document.getElementById('typing-indicator');
+
+        toggleBtn.addEventListener('click', () => {
+            chatWindow.classList.toggle('visible');
+            // Focus input when opening
+            if(chatWindow.classList.contains('visible')) {
+                setTimeout(() => chatInput.focus(), 300);
+            }
+        });
+
+        closeBtn.addEventListener('click', () => {
+            chatWindow.classList.remove('visible');
+        });
+
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        async function sendMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            if (!apiKey) {
+                addMessage("⚠️ Error: API Key is missing. Please add your Google AI API key in the code.", 'ai');
+                return;
+            }
+
+            // Add user message
+            addMessage(text, 'user');
+            chatInput.value = '';
+            
+            // Show loading
+            typingIndicator.style.display = 'block';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            try {
+                const reply = await callGeminiAPI(text);
+                addMessage(reply, 'ai');
+            } catch (error) {
+                console.error(error);
+                addMessage("Sorry, I'm having trouble connecting to my energy brain right now. Please try again later!", 'ai');
+            } finally {
+                typingIndicator.style.display = 'none';
+            }
+        }
+
+        function addMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = `message ${sender}`;
+            div.textContent = text;
+            messagesContainer.appendChild(div);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        async function callGeminiAPI(userQuery) {
+            const systemInstruction = "You are a helpful energy conservation assistant for Mauritius. You give specific, practical advice on how to save electricity, especially during outages in a tropical climate. Keep answers concise (under 50 words).";
+            
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemInstruction }] }
+            };
+
+            // Exponential backoff implementation
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            
+            for (let i = 0; i <= delays.length; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        if (i < delays.length) {
+                             // Wait and retry
+                            await new Promise(r => setTimeout(r, delays[i]));
+                            continue;
+                        }
+                        throw new Error(`API Error: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "I couldn't think of an answer.";
+                    
+                } catch (err) {
+                    if (i === delays.length) throw err;
+                }
+            }
+        }
 
         // Initialize
         fetchOutages();
