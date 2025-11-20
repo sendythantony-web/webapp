@@ -18,23 +18,47 @@
   --card-bg: #FFFFFF; 
   --text: #000000;    
   --radius: 14px;
-  --wrong-red: #dc3545;
 }
 
 /* ===============================
-   BACKGROUND TEXTURE
+   BACKGROUND LAYERS
 ================================*/
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
   color: var(--text);
   overflow-x: hidden;
-  position: relative;
+  /* Base color and Grid Texture */
   background-color: #fffcf5;
   background-image: 
     linear-gradient(rgba(255, 140, 0, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 140, 0, 0.05) 1px, transparent 1px);
   background-size: 25px 25px;
+  position: relative;
+}
+
+/* The Flowing Lightning Bolts (Full Page Overlay) */
+.background-fx {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 0; /* Behind content, above body background */
+  pointer-events: none; /* Click-through */
+  
+  /* Faded Lightning Bolt Pattern */
+  background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 L18 30 L28 30 L22 55 L42 25 L32 25 Z' fill='%23FF8C00' fill-opacity='0.08'/%3E%3C/svg%3E");
+  background-size: 80px 80px;
+  animation: boltFlow 20s linear infinite;
+}
+
+@keyframes boltFlow {
+  from { background-position: 0 0; }
+  to { background-position: 0 80px; }
+}
+
+/* Ensure Content sits above the background animation */
+.container, header, footer, .mascot {
+  position: relative;
+  z-index: 1; 
 }
 
 /* ===============================
@@ -67,56 +91,32 @@ header {
 .logo-section { display: flex; flex-direction: column; }
 
 header h1 {
-  margin: 0;
-  font-size: 1.8em;
-  color: #ffffff;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  margin: 0; font-size: 1.8em; color: #ffffff; font-weight: 700;
+  letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px;
 }
 
 .tagline {
-  color: #aab7c4;
-  font-size: 0.85em;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-top: 4px;
-  font-weight: 500;
+  color: #aab7c4; font-size: 0.85em; text-transform: uppercase;
+  letter-spacing: 1.5px; margin-top: 4px; font-weight: 500;
 }
 
 nav { display: flex; gap: 10px; align-items: center; }
 
 nav a {
-  color: #e0e6ed;
-  background: rgba(255,255,255,0.05);
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 0.9em;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  border: 1px solid transparent;
+  color: #e0e6ed; background: rgba(255,255,255,0.05); padding: 8px 16px;
+  border-radius: 8px; font-size: 0.9em; font-weight: 600; text-decoration: none;
+  transition: all 0.3s ease; border: 1px solid transparent;
 }
 
 nav a:hover {
-  background: rgba(255, 140, 0, 0.15);
-  color: var(--safety-orange);
+  background: rgba(255, 140, 0, 0.15); color: var(--safety-orange);
   border-color: var(--safety-orange);
 }
 
 .lang-btn {
-  background: var(--safety-orange);
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 0.85em;
-  margin-left: 15px;
-  transition: 0.2s;
+  background: var(--safety-orange); color: white; border: none; padding: 8px 12px;
+  border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.85em;
+  margin-left: 15px; transition: 0.2s;
 }
 .lang-btn:hover { background: #e07b00; }
 
@@ -126,61 +126,82 @@ nav a:hover {
 .container { width: 90%; max-width: 1000px; margin: auto; padding: 40px 0; }
 
 section h2 {
-  color: var(--primary);
-  text-shadow: 0 0 6px rgba(65,105,225,0.2);
-  border-left: 5px solid var(--safety-orange);
-  padding-left: 15px;
+  color: var(--primary); text-shadow: 0 0 6px rgba(65,105,225,0.2);
+  border-left: 5px solid var(--safety-orange); padding-left: 15px;
 }
 
 /* ===============================
-   CARDS
+   CARDS (Cleaned up)
 ================================*/
-.cards {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin: 40px 0 60px 0;
-}
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin: 40px 0 60px 0; }
 @media (max-width: 900px) { .cards { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .cards { grid-template-columns: 1fr; } }
 
 .card {
-  background: var(--card-bg);
-  padding: 20px;
-  border-radius: var(--radius);
+  background-color: var(--card-bg);
+  padding: 20px; 
+  border-radius: var(--radius); 
   cursor: pointer;
-  transition: 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  transition: 0.3s ease; 
+  position: relative; 
+  overflow: hidden; 
   border: 1px solid #eaeaea;
-  border-top: 5px solid var(--safety-orange);
+  border-top: 5px solid var(--safety-orange); 
   box-shadow: 0 4px 10px rgba(0,0,0,0.03);
 }
 
 .card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-6px); 
   box-shadow: 0 12px 25px rgba(255, 140, 0, 0.25);
   border-color: var(--safety-orange);
 }
 
-.card-title {
-  font-size: 1.3em; margin-bottom: 8px; font-weight: 600; color: var(--text);
-  display: flex; align-items: center; gap: 8px;
-}
-
-.card-content {
-  display: none; color: var(--text); margin-top: 12px; padding-top: 12px; border-top: 1px dashed #ddd;
-}
+.card-title { font-size: 1.3em; margin-bottom: 8px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
+.card-content { display: none; color: var(--text); margin-top: 12px; padding-top: 12px; border-top: 1px dashed #ddd; }
 .card.expanded .card-content { display: block; }
+
+/* ===============================
+   QUIZ
+================================*/
+.quiz {
+  background: var(--card-bg); padding: 25px; border-radius: var(--radius);
+  box-shadow: 0 10px 18px rgba(0,0,0,0.05); border-top: 6px solid var(--mint); margin-bottom: 80px;
+}
+.quiz-question { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px dashed #eee; }
+.quiz-question h4 { margin: 0 0 12px 0; color: var(--primary); }
+
+.quiz-options label {
+  display: block; margin-bottom: 8px; cursor: pointer; padding: 10px;
+  border-radius: 8px; transition: 0.2s; border: 1px solid transparent;
+}
+.quiz-options label:hover { background: #f0f4f8; }
+.quiz-options label.correct-answer { background-color: #d4edda; border-color: #c3e6cb; color: #155724; font-weight: 600; }
+.quiz-options label.wrong-answer { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; opacity: 0.7; }
+
+.quiz-explanation {
+  margin-top: 10px; padding: 10px; background: #fff3cd; border-left: 4px solid #ffc107;
+  font-size: 0.9em; color: #856404; display: none; border-radius: 4px;
+  animation: slideDown 0.3s ease-out;
+}
+@keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+button {
+  background: var(--primary); color: var(--soft-bg); padding: 12px 22px;
+  border: none; border-radius: var(--radius); font-size: 1em; font-weight: 600;
+  cursor: pointer; margin-top: 15px; transition: 0.3s;
+}
+button:hover { background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+
+.feedback { margin-top: 15px; padding: 12px; background: var(--mint); border-radius: var(--radius); display: none; font-weight: 600; color: var(--primary); }
+
 
 /* ===============================
    SIMULATOR
 ================================*/
 .sim-wrapper {
-  background: #f2f6ff;
-  padding: 20px;
-  border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(15,23,36,0.06);
-  margin-bottom: 80px;
-  border: 1px solid #eef2f7;
-  color: #0f1724;
+  background: #f2f6ff; padding: 20px; border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(15,23,36,0.06); margin-bottom: 80px;
+  border: 1px solid #eef2f7; color: #0f1724;
 }
 
 .sim-lead { text-align:center; color:#555; margin-top:0; font-size: 0.95em; }
@@ -196,12 +217,10 @@ section h2 {
 .sim-small { font-size:13px; color:#555; }
 .sim-card input[type=range] { width:100%; margin: 10px 0; cursor: pointer; }
 
-/* Results Box (Updated for Light/Pastel Theme) */
+/* Results Box - Light Theme */
 .sim-results { 
   padding:18px; border-radius:12px; margin-top:12px; transition:background .25s;
-  /* Initial Light Background */
-  background: #d5f8d5; 
-  color: #333;
+  background: #d5f8d5; color: #333;
 }
 
 .sim-result-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px dashed #aaa; }
@@ -210,40 +229,6 @@ section h2 {
 .sim-result-number { font-weight:700; }
 .sim-equiv { font-size:13px; color:#555; }
 .sim-risk { margin-top:10px; font-weight:700; }
-
-/* ===============================
-   QUIZ
-================================*/
-.quiz {
-  background: var(--card-bg);
-  padding: 25px; border-radius: var(--radius); box-shadow: 0 10px 18px rgba(0,0,0,0.05);
-  border-top: 6px solid var(--mint); margin-bottom: 80px;
-}
-.quiz-question { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px dashed #eee; }
-.quiz-question h4 { margin: 0 0 12px 0; color: var(--primary); }
-
-.quiz-options label {
-  display: block; margin-bottom: 8px; cursor: pointer; padding: 10px;
-  border-radius: 8px; transition: 0.2s; border: 1px solid transparent;
-}
-.quiz-options label:hover { background: #f0f4f8; }
-.quiz-options label.correct-answer { background-color: #d4edda; border-color: #c3e6cb; color: #155724; font-weight: 600; }
-.quiz-options label.wrong-answer { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; opacity: 0.7; }
-.quiz-explanation {
-  margin-top: 10px; padding: 10px; background: #fff3cd; border-left: 4px solid #ffc107;
-  font-size: 0.9em; color: #856404; display: none; border-radius: 4px;
-}
-
-button {
-  background: var(--primary); color: var(--soft-bg);
-  padding: 12px 22px; border: none; border-radius: var(--radius);
-  font-size: 1em; font-weight: 600; cursor: pointer; margin-top: 15px; transition: 0.3s;
-}
-button:hover { background: var(--accent); box-shadow: 0 0 12px var(--accent); }
-
-.feedback { margin-top: 15px; padding: 12px; background: var(--mint); border-radius: var(--radius); display: none; font-weight: 600; color: var(--primary); }
-
-footer { text-align: center; padding: 25px; margin-top: 50px; background: #fdf7eb; font-size: 0.9em; color: var(--text); }
 
 /* ===============================
    MASCOT & SPARKS
@@ -267,21 +252,24 @@ footer { text-align: center; padding: 25px; margin-top: 50px; background: #fdf7e
   padding: 12px 18px; border-radius: var(--radius); box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   font-size: 0.9em; display: none; width: 180px; color: var(--text); z-index: 1000;
 }
+footer { text-align: center; padding: 25px; margin-top: 50px; background: #fdf7eb; font-size: 0.9em; color: var(--text); }
 </style>
 </head>
 
 <body>
 
+<div class="background-fx"></div>
+
 <header>
   <div class="header-content">
     <div class="logo-section">
-      <h1>💡 <span data-i18n="headerTitle">EduPower</span> </h1>
-      <span class="tagline" data-i18n="headerTagline">Education • Awareness • Safety</span> 
+      <h1>💡 <span data-i18n="headerTitle">EduHub</span></h1>
+      <span class="tagline" data-i18n="headerTagline">Education • Awareness • Safety</span>
     </div>
     <nav>
-      <a href="index.html" data-i18n="navTips">Home</a>
-      <a href="#simulator" data-i18n="navSim">Outage Status</a>
-      <a href="#quiz" data-i18n="navQuiz">Education Hub</a>
+      <a href="index.hmtl" data-i18n="navTips">Home</a>
+      <a href="outage.html" data-i18n="navQuiz">Outage Status</a>
+      <a href="education6.html" data-i18n="navSim">Education Hub</a>
       <button class="lang-btn" onclick="toggleLanguage()">FR | EN</button>
     </nav>
   </div>
@@ -293,119 +281,77 @@ footer { text-align: center; padding: 25px; margin-top: 50px; background: #fdf7e
     <h2 data-i18n="cardsTitle">Interactive Cards</h2>
     <p data-i18n="cardsDesc">Click a card to reveal power outage safety tips.</p>
     <div class="cards">
-      <div class="card">
-        <div class="card-title">💡 <span data-i18n="card1Title">Emergency Lighting</span></div>
-        <div class="card-content"><p data-i18n="card1Text">Always keep flashlights or candles ready.</p></div>
-      </div>
-      <div class="card">
-        <div class="card-title">⚡ <span data-i18n="card2Title">Safety First</span></div>
-        <div class="card-content"><p data-i18n="card2Text">Turn off appliances to avoid surges.</p></div>
-      </div>
-      <div class="card">
-        <div class="card-title">🌟 <span data-i18n="card3Title">Tips & Tricks</span></div>
-        <div class="card-content"><p data-i18n="card3Text">Check your emergency kit and signal safety zones.</p></div>
-      </div>
-      <div class="card">
-        <div class="card-title">🕯️ <span data-i18n="card4Title">Candle Safety</span></div>
-        <div class="card-content"><p data-i18n="card4Text">Never leave candles unattended during a blackout.</p></div>
-      </div>
-      <div class="card">
-        <div class="card-title">🔌 <span data-i18n="card5Title">Power Management</span></div>
-        <div class="card-content"><p data-i18n="card5Text">Unplug sensitive electronics to prevent damage.</p></div>
-      </div>
-      <div class="card">
-        <div class="card-title">📱 <span data-i18n="card6Title">Communication</span></div>
-        <div class="card-content"><p data-i18n="card6Text">Keep phones charged and use only essential calls.</p></div>
-      </div>
+      <div class="card"><div class="card-title">💡 <span data-i18n="card1Title">Emergency Lighting</span></div><div class="card-content"><p data-i18n="card1Text">Always keep flashlights or candles ready.</p></div></div>
+      <div class="card"><div class="card-title">⚡ <span data-i18n="card2Title">Safety First</span></div><div class="card-content"><p data-i18n="card2Text">Turn off appliances to avoid surges.</p></div></div>
+      <div class="card"><div class="card-title">🌟 <span data-i18n="card3Title">Tips & Tricks</span></div><div class="card-content"><p data-i18n="card3Text">Check your emergency kit and signal safety zones.</p></div></div>
+      <div class="card"><div class="card-title">🕯️ <span data-i18n="card4Title">Candle Safety</span></div><div class="card-content"><p data-i18n="card4Text">Never leave candles unattended during a blackout.</p></div></div>
+      <div class="card"><div class="card-title">🔌 <span data-i18n="card5Title">Power Management</span></div><div class="card-content"><p data-i18n="card5Text">Unplug sensitive electronics to prevent damage.</p></div></div>
+      <div class="card"><div class="card-title">📱 <span data-i18n="card6Title">Communication</span></div><div class="card-content"><p data-i18n="card6Text">Keep phones charged and use only essential calls.</p></div></div>
     </div>
   </section>
-
 
   <section id="quiz" class="quiz">
     <h2 data-i18n="quizTitle">Power Outage Quiz</h2>
     <p data-i18n="quizDesc">Choose the best answer for each question:</p>
+    
     <div class="quiz-question" id="q1-box">
       <h4 data-i18n="q1_text">1. What is the safest light to use during a power outage?</h4>
       <div class="quiz-options">
-        <label class="option-label"><input type="radio" name="q1" value="wrong"> <span data-i18n="q1_a">Candles</span></label>
-        <label class="option-label" id="q1-correct"><input type="radio" name="q1" value="correct"> <span data-i18n="q1_b">Flashlights</span></label>
-        <label class="option-label"><input type="radio" name="q1" value="wrong"> <span data-i18n="q1_c">Matches</span></label>
+        <label class="option-label"><input type="radio" name="q1" value="wrong"><span data-i18n="q1_a">Candles</span></label>
+        <label class="option-label" id="q1-correct"><input type="radio" name="q1" value="correct"><span data-i18n="q1_b">Flashlights</span></label>
+        <label class="option-label"><input type="radio" name="q1" value="wrong"><span data-i18n="q1_c">Matches</span></label>
       </div>
-      <div class="quiz-explanation" id="q1-explain" data-i18n="q1_expl"></div>
+      <div class="quiz-explanation" id="q1-explain" data-i18n="q1_expl">Tip: Candles are fire hazards! Flashlights are always safer.</div>
     </div>
+
     <div class="quiz-question" id="q2-box">
       <h4 data-i18n="q2_text">2. What should you do with the refrigerator door when the power is out?</h4>
       <div class="quiz-options">
-        <label class="option-label"><input type="radio" name="q2" value="wrong"> <span data-i18n="q2_a">Open it often</span></label>
-        <label class="option-label"><input type="radio" name="q2" value="wrong"> <span data-i18n="q2_b">Leave it wide open</span></label>
-        <label class="option-label" id="q2-correct"><input type="radio" name="q2" value="correct"> <span data-i18n="q2_c">Keep it closed</span></label>
+        <label class="option-label"><input type="radio" name="q2" value="wrong"><span data-i18n="q2_a">Open it often</span></label>
+        <label class="option-label"><input type="radio" name="q2" value="wrong"><span data-i18n="q2_b">Leave it wide open</span></label>
+        <label class="option-label" id="q2-correct"><input type="radio" name="q2" value="correct"><span data-i18n="q2_c">Keep it closed</span></label>
       </div>
-      <div class="quiz-explanation" id="q2-explain" data-i18n="q2_expl"></div>
+      <div class="quiz-explanation" id="q2-explain" data-i18n="q2_expl">Tip: Opening the door lets cold air out. Keep it shut to save your food.</div>
     </div>
+
     <div class="quiz-question" id="q3-box">
       <h4 data-i18n="q3_text">3. If you see a wire fall down outside, what should you do?</h4>
       <div class="quiz-options">
-        <label class="option-label"><input type="radio" name="q3" value="wrong"> <span data-i18n="q3_a">Touch it</span></label>
-        <label class="option-label" id="q3-correct"><input type="radio" name="q3" value="correct"> <span data-i18n="q3_b">Stay far away</span></label>
-        <label class="option-label"><input type="radio" name="q3" value="wrong"> <span data-i18n="q3_c">Move it with a stick</span></label>
+        <label class="option-label"><input type="radio" name="q3" value="wrong"><span data-i18n="q3_a">Touch it</span></label>
+        <label class="option-label" id="q3-correct"><input type="radio" name="q3" value="correct"><span data-i18n="q3_b">Stay far away</span></label>
+        <label class="option-label"><input type="radio" name="q3" value="wrong"><span data-i18n="q3_c">Move it with a stick</span></label>
       </div>
-      <div class="quiz-explanation" id="q3-explain" data-i18n="q3_expl"></div>
+      <div class="quiz-explanation" id="q3-explain" data-i18n="q3_expl">Tip: Never touch downed wires. Electricity can travel through sticks!</div>
     </div>
+
     <div class="quiz-question" id="q4-box">
       <h4 data-i18n="q4_text">4. What should you do with TVs and computers when the power goes out?</h4>
       <div class="quiz-options">
-        <label class="option-label" id="q4-correct">
-          <input type="radio" name="q4" value="correct"> 
-          <span data-i18n="q4_a">Unplug them</span>
-        </label>
-        <label class="option-label">
-          <input type="radio" name="q4" value="wrong"> 
-          <span data-i18n="q4_b">Leave them on</span>
-        </label>
-        <label class="option-label">
-          <input type="radio" name="q4" value="wrong"> 
-          <span data-i18n="q4_c">Cover them with blankets</span>
-        </label>
+        <label class="option-label" id="q4-correct"><input type="radio" name="q4" value="correct"><span data-i18n="q4_a">Unplug them</span></label>
+        <label class="option-label"><input type="radio" name="q4" value="wrong"><span data-i18n="q4_b">Leave them on</span></label>
+        <label class="option-label"><input type="radio" name="q4" value="wrong"><span data-i18n="q4_c">Cover them with blankets</span></label>
       </div>
-      <div class="quiz-explanation" id="q4-explain" data-i18n="q4_expl"></div>
+      <div class="quiz-explanation" id="q4-explain" data-i18n="q4_expl">Tip: Power often returns with a 'surge' that can fry sensitive electronics.</div>
     </div>
 
     <div class="quiz-question" id="q5-box">
       <h4 data-i18n="q5_text">5. If you have a generator, where should you run it?</h4>
       <div class="quiz-options">
-        <label class="option-label">
-          <input type="radio" name="q5" value="wrong"> 
-          <span data-i18n="q5_a">In the kitchen</span>
-        </label>
-        <label class="option-label">
-          <input type="radio" name="q5" value="wrong"> 
-          <span data-i18n="q5_b">In the garage</span>
-        </label>
-        <label class="option-label" id="q5-correct">
-          <input type="radio" name="q5" value="correct"> 
-          <span data-i18n="q5_c">Outside, far from windows</span>
-        </label>
+        <label class="option-label"><input type="radio" name="q5" value="wrong"><span data-i18n="q5_a">In the kitchen</span></label>
+        <label class="option-label"><input type="radio" name="q5" value="wrong"><span data-i18n="q5_b">In the garage</span></label>
+        <label class="option-label" id="q5-correct"><input type="radio" name="q5" value="correct"><span data-i18n="q5_c">Outside, far from windows</span></label>
       </div>
-      <div class="quiz-explanation" id="q5-explain" data-i18n="q5_expl"></div>
+      <div class="quiz-explanation" id="q5-explain" data-i18n="q5_expl">Danger: Generators produce deadly Carbon Monoxide. Never use indoors.</div>
     </div>
 
     <div class="quiz-question" id="q6-box">
       <h4 data-i18n="q6_text">6. Why is it important to store water before a storm?</h4>
       <div class="quiz-options">
-        <label class="option-label" id="q6-correct">
-          <input type="radio" name="q6" value="correct"> 
-          <span data-i18n="q6_a">Electric water pumps might stop</span>
-        </label>
-        <label class="option-label">
-          <input type="radio" name="q6" value="wrong"> 
-          <span data-i18n="q6_b">To water the plants</span>
-        </label>
-        <label class="option-label">
-          <input type="radio" name="q6" value="wrong"> 
-          <span data-i18n="q6_c">Water expires quickly</span>
-        </label>
+        <label class="option-label" id="q6-correct"><input type="radio" name="q6" value="correct"><span data-i18n="q6_a">Electric water pumps might stop</span></label>
+        <label class="option-label"><input type="radio" name="q6" value="wrong"><span data-i18n="q6_b">To water the plants</span></label>
+        <label class="option-label"><input type="radio" name="q6" value="wrong"><span data-i18n="q6_c">Water expires quickly</span></label>
       </div>
-      <div class="quiz-explanation" id="q6-explain" data-i18n="q6_expl"></div>
+      <div class="quiz-explanation" id="q6-explain" data-i18n="q6_expl">Tip: Many homes use electric pumps. If power fails, taps run dry.</div>
     </div>
 
     <button id="checkAnswers" data-i18n="btnCheck">Check My Answers</button>
@@ -416,63 +362,24 @@ footer { text-align: center; padding: 25px; margin-top: 50px; background: #fdf7e
     <h2 data-i18n="simTitle">Energy Consumption Simulator</h2>
     <div class="sim-wrapper">
         <p class="sim-lead" data-i18n="simDesc">Use the sliders to estimate monthly kWh and receive your Energy Consumption risk level.</p>
-        
         <div class="sim-grid">
           <div>
-            <div class="sim-card">
-              <div class="sim-label"><span data-i18n="lblFan">🌀 Fan (hours/day)</span> <span id="fanValue">6</span></div>
-              <input type="range" min="0" max="24" value="6" id="fanSlider" />
-              <div class="sim-small"><span data-i18n="pwrTyp">Typical power:</span> <strong>60 W</strong></div>
-            </div>
-            <div class="sim-card" style="margin-top:12px">
-              <div class="sim-label"><span data-i18n="lblShower">🚿 Water Heater (mins)</span> <span id="showerValue">8</span></div>
-              <input type="range" min="0" max="20" value="8" id="showerSlider" />
-              <div class="sim-small"><span data-i18n="pwrTyp">Typical power:</span> <strong>2000 W</strong></div>
-            </div>
-            <div class="sim-card" style="margin-top:12px">
-              <div class="sim-label"><span data-i18n="lblFridge">🧊 Fridge Level (1–7)</span> <span id="fridgeValue">3</span></div>
-              <input type="range" min="1" max="7" value="3" id="fridgeSlider" />
-              <div class="sim-small"><span data-i18n="pwrBase">Base consumption:</span> <strong>30 kWh</strong></div>
-            </div>
-            <div class="sim-card" style="margin-top:12px">
-              <div class="sim-label"><span data-i18n="lblAC">❄️ AC (hours/day)</span> <span id="acValue">4</span></div>
-              <input type="range" min="0" max="24" value="4" id="acSlider" />
-              <div class="sim-small"><span data-i18n="pwrTyp">Typical power:</span> <strong>1.2 kW</strong></div>
-            </div>
-            <div class="sim-card" style="margin-top:12px">
-              <div class="sim-label"><span data-i18n="lblOven">🍞 Oven (mins/day)</span> <span id="ovenValue">30</span></div>
-              <input type="range" min="0" max="120" value="30" id="ovenSlider" />
-              <div class="sim-small"><span data-i18n="pwrTyp">Typical power:</span> <strong>2 kW</strong></div>
-            </div>
+            <div class="sim-card"><div class="sim-label"><span data-i18n="lblFan">🌀 Fan (hours/day)</span> <span id="fanValue">6</span></div><input type="range" min="0" max="24" value="6" id="fanSlider" /><div class="sim-small"><span data-i18n="pwrTyp">Typical power:</span> <strong>60 W</strong></div></div>
+            <div class="sim-card" style="margin-top:12px"><div class="sim-label"><span data-i18n="lblShower">🚿 Water Heater (mins)</span> <span id="showerValue">8</span></div><input type="range" min="0" max="20" value="8" id="showerSlider" /><div class="sim-small"><span data-i18n="pwrTyp">Typical power:</span> <strong>2000 W</strong></div></div>
+            <div class="sim-card" style="margin-top:12px"><div class="sim-label"><span data-i18n="lblFridge">🧊 Fridge Level (1–7)</span> <span id="fridgeValue">3</span></div><input type="range" min="1" max="7" value="3" id="fridgeSlider" /><div class="sim-small"><span data-i18n="pwrBase">Base consumption:</span> <strong>30 kWh</strong></div></div>
+            <div class="sim-card" style="margin-top:12px"><div class="sim-label"><span data-i18n="lblAC">❄️ AC (hours/day)</span> <span id="acValue">4</span></div><input type="range" min="0" max="24" value="4" id="acSlider" /><div class="sim-small"><span data-i18n="pwrTyp">Typical power:</span> <strong>1.2 kW</strong></div></div>
+            <div class="sim-card" style="margin-top:12px"><div class="sim-label"><span data-i18n="lblOven">🍞 Oven (mins/day)</span> <span id="ovenValue">30</span></div><input type="range" min="0" max="120" value="30" id="ovenSlider" /><div class="sim-small"><span data-i18n="pwrTyp">Typical power:</span> <strong>2 kW</strong></div></div>
           </div>
-          
           <div>
-            <div class="sim-card">
-              <div class="sim-label"><span data-i18n="lblWash">🧺 Washer (cycles/wk)</span> <span id="washValue">3</span></div>
-              <input type="range" min="0" max="14" value="3" id="washSlider" />
-              <div class="sim-small"><span data-i18n="engTyp">Typical energy:</span> <strong>1.0 kWh</strong></div>
-            </div>
-            <div class="sim-card" style="margin-top:12px">
-              <div class="sim-label"><span data-i18n="lblDish">🍽️ Dishwasher (cycles/wk)</span> <span id="dishValue">2</span></div>
-              <input type="range" min="0" max="14" value="2" id="dishSlider" />
-              <div class="sim-small"><span data-i18n="engTyp">Typical energy:</span> <strong>1.5 kWh</strong></div>
-            </div>
-            <div class="sim-card" style="margin-top:12px">
-              <div class="sim-label"><span data-i18n="lblStove">🍳 Electric Stove (mins)</span> <span id="stoveValue">20</span></div>
-              <input type="range" min="0" max="180" value="20" id="stoveSlider" />
-              <div class="sim-small"><span data-i18n="pwrTyp">Typical power:</span> <strong>2 kW</strong></div>
-            </div>
-            <div class="sim-card" style="margin-top:12px">
-              <div class="sim-label"><span data-i18n="lblPump">💧 Water Pump (mins)</span> <span id="pumpValue">15</span></div>
-              <input type="range" min="0" max="60" value="15" id="pumpSlider" />
-              <div class="sim-small"><span data-i18n="pwrTyp">Typical power:</span> <strong>0.75 kW</strong></div>
-            </div>
+            <div class="sim-card"><div class="sim-label"><span data-i18n="lblWash">🧺 Washer (cycles/wk)</span> <span id="washValue">3</span></div><input type="range" min="0" max="14" value="3" id="washSlider" /><div class="sim-small"><span data-i18n="engTyp">Typical energy:</span> <strong>1.0 kWh</strong></div></div>
+            <div class="sim-card" style="margin-top:12px"><div class="sim-label"><span data-i18n="lblDish">🍽️ Dishwasher (cycles/wk)</span> <span id="dishValue">2</span></div><input type="range" min="0" max="14" value="2" id="dishSlider" /><div class="sim-small"><span data-i18n="engTyp">Typical energy:</span> <strong>1.5 kWh</strong></div></div>
+            <div class="sim-card" style="margin-top:12px"><div class="sim-label"><span data-i18n="lblStove">🍳 Electric Stove (mins)</span> <span id="stoveValue">20</span></div><input type="range" min="0" max="180" value="20" id="stoveSlider" /><div class="sim-small"><span data-i18n="pwrTyp">Typical power:</span> <strong>2 kW</strong></div></div>
+            <div class="sim-card" style="margin-top:12px"><div class="sim-label"><span data-i18n="lblPump">💧 Water Pump (mins)</span> <span id="pumpValue">15</span></div><input type="range" min="0" max="60" value="15" id="pumpSlider" /><div class="sim-small"><span data-i18n="pwrTyp">Typical power:</span> <strong>0.75 kW</strong></div></div>
           </div>
         </div>
     
         <div id="resultsBox" class="sim-results sim-card">
           <h3 style="margin:0 0 8px 0;" data-i18n="resMonthly">Estimated Monthly Usage</h3>
-    
           <div class="sim-result-row"><div class="sim-result-title" data-i18n="lblFan">🌀 Fan</div><div><div class="sim-result-number" id="fanKwh">0</div><div class="sim-equiv" id="fanEquivalent"></div></div></div>
           <div class="sim-result-row"><div class="sim-result-title" data-i18n="lblShower">🚿 Water Heater</div><div><div class="sim-result-number" id="showerKwh">0</div><div class="sim-equiv" id="showerEquivalent"></div></div></div>
           <div class="sim-result-row"><div class="sim-result-title" data-i18n="lblFridge">🧊 Fridge</div><div><div class="sim-result-number" id="fridgeKwh">0</div><div class="sim-equiv" id="fridgeEquivalent"></div></div></div>
@@ -488,26 +395,17 @@ footer { text-align: center; padding: 25px; margin-top: 50px; background: #fdf7e
             <div>
               <div class="sim-small" data-i18n="resTotal">Total monthly consumption</div>
               <div class="sim-result-number" id="totalKwh">0</div>
-              
               <div class="equiv" id="TotalEquivalent" style="font-weight:bold; color:#2b6cb0; margin-top:5px; font-size:1.1em;"></div>
-
             </div>
             <div style="text-align:right">
               <div class="sim-risk" id="riskLevel"></div>
               <div class="sim-small" id="compareText"></div>
             </div>
           </div>
-    
         </div>
     </div>
   </section>
 
-  
-
-  <section id="about">
-    <h2 data-i18n="aboutTitle"></h2>
-    <p data-i18n="aboutText"></p>
-  </section>
 </div>
 
 <footer data-i18n="footer">© 2025 Power Outage Interactive Template | HTML, CSS & JavaScript</footer>
@@ -520,8 +418,8 @@ footer { text-align: center; padding: 25px; margin-top: 50px; background: #fdf7e
 ================================*/
 const translations = {
   en: {
-    headerTitle: "Power Outage Hub", headerTagline: "Education • Awareness • Safety",
-    navTips: "Safety Tips", navSim: "Simulator", navQuiz: "Quiz",
+    headerTitle: "EduHub", headerTagline: "Education • Awareness • Safety",
+    navTips: "Home", navSim: "Outage Status", navQuiz: "Education Hub",
     cardsTitle: "Interactive Cards", cardsDesc: "Click a card to reveal power outage safety tips.",
     card1Title: "Emergency Lighting", card1Text: "Always keep flashlights or candles ready.",
     card2Title: "Safety First", card2Text: "Turn off appliances to avoid surges.",
@@ -542,19 +440,10 @@ const translations = {
     q1_text: "1. What is the safest light to use during a power outage?", q1_a: "Candles", q1_b: "Flashlights", q1_c: "Matches", q1_expl: "Tip: Candles are fire hazards! Flashlights are always safer.",
     q2_text: "2. What should you do with the refrigerator door when the power is out?", q2_a: "Open it often", q2_b: "Leave it wide open", q2_c: "Keep it closed", q2_expl: "Tip: Opening the door lets cold air out. Keep it shut to save your food.",
     q3_text: "3. If you see a wire fall down outside, what should you do?", q3_a: "Touch it", q3_b: "Stay far away", q3_c: "Move it with a stick", q3_expl: "Tip: Never touch downed wires. Electricity can travel through sticks!",
+    q4_text: "4. What should you do with TVs and computers when the power goes out?", q4_a: "Unplug them", q4_b: "Leave them on", q4_c: "Cover them with blankets", q4_expl: "Tip: Power often returns with a 'surge' that can fry sensitive electronics.",
+    q5_text: "5. If you have a generator, where should you run it?", q5_a: "In the kitchen", q5_b: "In the garage", q5_c: "Outside, far from windows", q5_expl: "Danger: Generators produce deadly Carbon Monoxide. Never use indoors.",
+    q6_text: "6. Why is it important to store water before a storm?", q6_a: "Electric water pumps might stop", q6_b: "To water the plants", q6_c: "Water expires quickly", q6_expl: "Tip: Many homes use electric pumps. If power fails, taps run dry.",
 
-    
-    q4_text: "4. What should you do with TVs and computers when the power goes out?",
-    q4_a: "Unplug them", q4_b: "Leave them on", q4_c: "Cover them with blankets",
-    q4_expl: "Tip: Power often returns with a 'surge' (spike) that can fry sensitive electronics. Unplug them!",
-
-    q5_text: "5. If you have a generator, where should you run it?",
-    q5_a: "In the kitchen", q5_b: "In the garage", q5_c: "Outside, far from windows",
-    q5_expl: "Danger: Generators produce Carbon Monoxide, an odorless deadly gas. Never use them indoors.",
-
-    q6_text: "6. Why is it important to store water before a storm?",
-    q6_a: "Electric water pumps might stop", q6_b: "To water the plants", q6_c: "Water expires quickly",
-    q6_expl: "Tip: Many homes rely on electric pumps. If power fails, taps might run dry.",
     btnCheck: "Check My Answers", aboutTitle: "About This Template", aboutText: "This interactive template uses Royal Blue, Light Gray, and Safety Green to convey a power outage theme.",
     footer: "© 2025 Power Outage Interactive Template | HTML, CSS & JavaScript", mascotTip: "Click cards to learn safety tips! ⚡",
     costPrefix: "Costs about Rs", costSuffix: "/ month",
@@ -563,8 +452,8 @@ const translations = {
     compareAbove: "kWh above Mauritius avg", compareBelow: "kWh below Mauritius avg"
   },
   fr: {
-    headerTitle: "Centre Info Pannes", headerTagline: "Éducation • Sensibilisation • Sécurité",
-    navTips: "Conseils", navSim: "Simulateur", navQuiz: "Quiz",
+    headerTitle: "EduHub", headerTagline: "Éducation • Sensibilisation • Sécurité",
+    navTips: "Page d'accueil", navSim: "Statut de panne", navQuiz: "Centre d'éducation",
     cardsTitle: "Cartes Interactives", cardsDesc: "Cliquez sur une carte pour révéler des conseils de sécurité.",
     card1Title: "Éclairage d'Urgence", card1Text: "Gardez toujours des lampes de poche ou des bougies prêtes.",
     card2Title: "Sécurité d'Abord", card2Text: "Éteignez les appareils pour éviter les surtensions.",
@@ -585,19 +474,10 @@ const translations = {
     q1_text: "1. Quelle est la lumière la plus sûre pendant une panne ?", q1_a: "Bougies", q1_b: "Lampes de poche", q1_c: "Allumettes", q1_expl: "Conseil : Les bougies causent des incendies ! Les lampes de poche sont plus sûres.",
     q2_text: "2. Que faire avec la porte du réfrigérateur pendant une panne ?", q2_a: "L'ouvrir souvent", q2_b: "La laisser ouverte", q2_c: "La garder fermée", q2_expl: "Conseil : Ouvrir la porte laisse sortir le froid. Gardez-la fermée.",
     q3_text: "3. Si vous voyez un fil électrique tomber, que faites-vous ?", q3_a: "Le toucher", q3_b: "Rester loin", q3_c: "Le bouger avec un bâton", q3_expl: "Conseil : Ne touchez jamais les fils. L'électricité traverse le bois !",
-    
+    q4_text: "4. Que faire des TV et ordinateurs lors d'une panne ?", q4_a: "Les débrancher", q4_b: "Les laisser allumés", q4_c: "Les couvrir", q4_expl: "Conseil : Le courant revient souvent avec une surtension qui peut griller les appareils.",
+    q5_text: "5. Si vous avez un générateur, où devez-vous l'utiliser ?", q5_a: "Dans la cuisine", q5_b: "Dans le garage", q5_c: "Dehors, loin des fenêtres", q5_expl: "Danger : Les générateurs produisent du monoxyde de carbone, un gaz mortel.",
+    q6_text: "6. Pourquoi stocker de l'eau avant une tempête ?", q6_a: "Les pompes peuvent s'arrêter", q6_b: "Pour arroser les plantes", q6_c: "L'eau expire vite", q6_expl: "Conseil : Sans électricité, les pompes à eau peuvent cesser de fonctionner.",
 
-    q4_text: "4. Que faire des TV et ordinateurs lors d'une panne ?",
-    q4_a: "Les débrancher", q4_b: "Les laisser allumés", q4_c: "Les couvrir",
-    q4_expl: "Conseil : Le courant revient souvent avec une surtension qui peut griller les appareils.",
-
-    q5_text: "5. Si vous avez un générateur, où devez-vous l'utiliser ?",
-    q5_a: "Dans la cuisine", q5_b: "Dans le garage", q5_c: "Dehors, loin des fenêtres",
-    q5_expl: "Danger : Les générateurs produisent du monoxyde de carbone, un gaz mortel. Jamais à l'intérieur !",
-
-    q6_text: "6. Pourquoi stocker de l'eau avant une tempête ?",
-    q6_a: "Les pompes électriques peuvent s'arrêter", q6_b: "Pour arroser les plantes", q6_c: "L'eau expire vite",
-    q6_expl: "Conseil : Sans électricité, les pompes à eau de la maison peuvent cesser de fonctionner.",
     btnCheck: "Vérifier mes réponses", aboutTitle: "À Propos", aboutText: "Ce modèle interactif utilise le Bleu Royal, le Gris Clair et le Vert Sécurité.",
     footer: "© 2025 Modèle Interactif Pannes de Courant | HTML, CSS & JavaScript", mascotTip: "Cliquez sur les cartes pour des conseils ! ⚡",
     costPrefix: "Coût env. Rs", costSuffix: "/ mois",
@@ -632,33 +512,32 @@ document.querySelectorAll(".card").forEach(card => { card.addEventListener("clic
    QUIZ LOGIC
 ================================*/
 document.getElementById("checkAnswers").addEventListener("click", () => {
-  let score = 0;
-  let total = 6; // CHANGED FROM 3 TO 6
-
-  // Reset visual states
-  document.querySelectorAll('.option-label').forEach(l => {
-    l.classList.remove('correct-answer', 'wrong-answer');
-  });
+  let score = 0; let total = 6; 
+  document.querySelectorAll('.option-label').forEach(l => { l.classList.remove('correct-answer', 'wrong-answer'); });
   document.querySelectorAll('.quiz-explanation').forEach(e => e.style.display = 'none');
 
   function checkQuestion(name, correctId, explanationId) {
     const selected = document.querySelector(`input[name="${name}"]:checked`);
     const correctLabel = document.getElementById(correctId);
     const expl = document.getElementById(explanationId);
+    
+    // Always show explanation after checking
+    expl.style.display = "block";
+
     if (selected) {
       const userLabel = selected.parentElement;
       if (selected.value === "correct") { userLabel.classList.add('correct-answer'); return 1; } 
-      else { userLabel.classList.add('wrong-answer'); correctLabel.classList.add('correct-answer'); expl.style.display = "block"; return 0; }
+      else { userLabel.classList.add('wrong-answer'); correctLabel.classList.add('correct-answer'); return 0; }
     } else {
-      correctLabel.classList.add('correct-answer'); expl.style.display = "block"; return 0;
+      correctLabel.classList.add('correct-answer'); return 0;
     }
   }
   score += checkQuestion('q1', 'q1-correct', 'q1-explain');
   score += checkQuestion('q2', 'q2-correct', 'q2-explain');
   score += checkQuestion('q3', 'q3-correct', 'q3-explain');
   score += checkQuestion('q4', 'q4-correct', 'q4-explain');
-  score += checkQuestion('q5', 'q5-correct', 'q5-explain'); 
-  score += checkQuestion('q6', 'q6-correct', 'q6-explain'); 
+  score += checkQuestion('q5', 'q5-correct', 'q5-explain');
+  score += checkQuestion('q6', 'q6-correct', 'q6-explain');
 
   const fb = document.getElementById("feedback");
   fb.style.display = "block";
@@ -695,7 +574,6 @@ const simElements = {
   stoveSlider: document.getElementById('stoveSlider'), stoveValue: document.getElementById('stoveValue'), stoveKwh: document.getElementById('stoveKwh'), stoveEquivalent: document.getElementById('stoveEquivalent'),
   pumpSlider: document.getElementById('pumpSlider'), pumpValue: document.getElementById('pumpValue'), pumpKwh: document.getElementById('pumpKwh'), pumpEquivalent: document.getElementById('pumpEquivalent'),
   totalKwh: document.getElementById('totalKwh'), riskLevel: document.getElementById('riskLevel'), resultsBox: document.getElementById('resultsBox'), compareText: document.getElementById('compareText'),
-  // NEW ELEMENT
   totalValue: document.getElementById('TotalEquivalent')
 };
 
@@ -748,12 +626,9 @@ function calcAll(){
   const total = fan_kwh + shower_kwh + fridge_kwh + ac_kwh + oven_kwh + wash_kwh + dish_kwh + stove_kwh + pump_kwh;
   simElements.totalKwh.textContent = total.toFixed(2);
   
-  // === NEW: Update Total Monthly Bill ===
   simElements.totalValue.textContent = `≈ ${t.totalBill} Rs ${(total * cebRate).toFixed(2)}`;
 
-  // Risk colouring & comparison (Restored Light Theme)
   updateRiskLevel(total);
-
   const mauAvg = 190; const diff = Math.round(total - mauAvg);
   simElements.compareText.textContent = diff >= 0 ? `▲ ${diff} ${t.compareAbove} (${mauAvg} kWh)` : `▼ ${Math.abs(diff)} ${t.compareBelow} (${mauAvg} kWh)`;
 }
@@ -762,8 +637,6 @@ function updateRiskLevel(total){
   const box = simElements.resultsBox;
   const label = simElements.riskLevel;
   const t = translations[currentLang];
-
-  // Use Light Backgrounds (User Request)
   if (total < 120){ box.style.background = '#d5f8d5'; label.style.color = '#0a7a0a'; label.textContent = t.riskLow; }
   else if (total < 170){ box.style.background = '#fff6c7'; label.style.color = '#c19700'; label.textContent = t.riskNormal; }
   else if (total < 230){ box.style.background = '#ffe1b3'; label.style.color = '#c26b00'; label.textContent = t.riskHigh; }
