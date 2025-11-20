@@ -79,18 +79,17 @@
         }
 
         /* Language Toggle */
-        
         .lang-btn {
-        background: var(--safety-orange);
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 700;
-        font-size: 0.85em;
-        margin-left: 15px;
-        transition: 0.2s;
+            background: var(--safety-orange);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.85em;
+            margin-left: 15px;
+            transition: 0.2s;
         }
         .lang-btn:hover { background: #e07b00; }
 
@@ -112,7 +111,7 @@
             max-width: 900px;
             margin: 0 auto;
             padding-top: 60px;
-            padding-bottom: 100px; /* Extra space for chatbot */
+            padding-bottom: 60px; /* Reduced padding since chatbot is gone */
         }
 
         .header-block {
@@ -323,156 +322,6 @@
         .severity-low { background: #fefce8; color: #854d0e; border: 2px solid #fde047; }
         .severity-medium { background: #fff7ed; color: #9a3412; border: 2px solid #fdba74; }
         .severity-high { background: #fef2f2; color: #991b1b; border: 2px solid #fca5a5; }
-
-        /* --- CHATBOT STYLES --- */
-        #chatbot-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-
-        #chatbot-toggle {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: #6366f1;
-            color: white;
-            border: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            cursor: pointer;
-            font-size: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.3s;
-        }
-
-        #chatbot-toggle:hover {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        #chatbot-window {
-            position: absolute;
-            bottom: 80px;
-            right: 0;
-            width: 350px;
-            height: 500px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(20px);
-        }
-
-        #chatbot-window.visible {
-            opacity: 1;
-            pointer-events: all;
-            transform: translateY(0);
-        }
-
-        .chat-header {
-            background: #6366f1;
-            color: white;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .chat-header h3 {
-            font-size: 1.1rem;
-            margin: 0;
-        }
-
-        #chatbot-close {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        #chat-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            background: #f9fafb;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .message {
-            max-width: 80%;
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-size: 0.95rem;
-            line-height: 1.4;
-        }
-
-        .message.ai {
-            background: #e0e7ff;
-            color: #1f2937;
-            align-self: flex-start;
-            border-bottom-left-radius: 2px;
-        }
-
-        .message.user {
-            background: #6366f1;
-            color: white;
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-        }
-
-        .chat-input-area {
-            padding: 15px;
-            border-top: 1px solid #e5e7eb;
-            display: flex;
-            gap: 8px;
-            background: white;
-        }
-
-        #chat-input {
-            flex: 1;
-            padding: 8px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 20px;
-            outline: none;
-        }
-
-        #chat-input:focus {
-            border-color: #6366f1;
-        }
-
-        #chat-send {
-            background: #6366f1;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        #chat-send:disabled {
-            background: #a5b4fc;
-            cursor: not-allowed;
-        }
-        
-        .typing-indicator {
-            font-size: 0.8rem;
-            color: #6b7280;
-            margin-left: 10px;
-            margin-bottom: 5px;
-            display: none;
-        }
     </style>
 </head>
 
@@ -519,32 +368,11 @@
         <div id="outages-container"></div>
     </div>
 
-    <div id="chatbot-container">
-        <button id="chatbot-toggle">🌱</button>
-        <div id="chatbot-window">
-            <div class="chat-header">
-                <h3 data-i18n="chatTitle">Energy Saver AI</h3>
-                <button id="chatbot-close">×</button>
-            </div>
-            <div id="chat-messages">
-                <div class="message ai" id="welcome-msg" data-i18n="chatWelcome">Hello! I'm your energy assistant. Ask me how to save power or what to do during an outage!</div>
-            </div>
-            <div class="typing-indicator" id="typing-indicator">AI is typing...</div>
-            <div class="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Ask about energy tips...">
-                <button id="chat-send" data-i18n="chatSend">Send</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         // ==========================================
         // ⚙️ CONFIGURATION
         // ==========================================
         const API_URL = 'https://testdeploy-ixhj.onrender.com/api/outages'; 
-        
-        // 🔥 PASTE YOUR API KEY HERE
-        const apiKey = "AIzaSyD1VMF-OsPLJWYbn8oNxE7QXmDhrjhrB8Q"; 
         // ==========================================
 
         let allOutages = [];
@@ -566,10 +394,6 @@
                 loading: "Loading outage data...",
                 errorTitle: "Error",
                 emptyMsg: "No outages found for this filter.",
-                chatTitle: "Energy Saver AI",
-                chatWelcome: "Hello! I'm your energy assistant. Ask me how to save power or what to do during an outage!",
-                chatInputPlaceholder: "Ask about energy tips...",
-                chatSend: "Send",
                 timeStarts: "Starts in",
                 timeEnds: "Ends in",
                 timeCompleted: "Completed",
@@ -590,10 +414,6 @@
                 loading: "Chargement des données...",
                 errorTitle: "Erreur",
                 emptyMsg: "Aucune panne trouvée pour ce filtre.",
-                chatTitle: "Assistant Énergie IA",
-                chatWelcome: "Bonjour ! Je suis votre assistant énergie. Demandez-moi comment économiser ou quoi faire pendant une panne !",
-                chatInputPlaceholder: "Posez une question...",
-                chatSend: "Envoyer",
                 timeStarts: "Commence dans",
                 timeEnds: "Termine dans",
                 timeCompleted: "Terminé",
@@ -605,14 +425,11 @@
 
         function toggleLanguage() {
             currentLang = currentLang === 'en' ? 'fr' : 'en';
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (translations[currentLang][key]) {
-                el.textContent = translations[currentLang][key];
-                }
-            });
-            calcAll();
-            }
+            // Use the existing applyTranslations logic inside here or separately
+            applyTranslations();
+            // Re-render to update dynamic content
+            render();
+        }
         
         // Mapping raw API values to Display Names (English and French)
         const DISTRICT_MAPPING = {
@@ -629,26 +446,21 @@
         };
 
         // --- Language Logic ---
-        const langToggleBtn = document.getElementById('lang-toggle');
+        const langToggleBtn = document.querySelector('.lang-btn');
         
-        langToggleBtn.addEventListener('click', () => {
-            currentLang = currentLang === 'en' ? 'fr' : 'en';
-            langToggleBtn.textContent = currentLang === 'en' ? 'FR' : 'EN'; // Show opposite option
-            applyTranslations();
-            render(); // Re-render dynamic content
-        });
-
+        // Note: We are using the inline onclick="toggleLanguage()" so we can keep this simple,
+        // but maintaining the existing update logic.
         function applyTranslations() {
             const t = translations[currentLang];
             
+            // Update toggle button text
+            if(langToggleBtn) langToggleBtn.textContent = currentLang === 'en' ? 'FR | EN' : 'EN | FR';
+
             // Translate static elements
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (t[key]) el.textContent = t[key];
             });
-
-            // Translate placeholder
-            document.getElementById('chat-input').placeholder = t.chatInputPlaceholder;
         }
 
         // --- Main Logic ---
@@ -895,106 +707,6 @@
                 render();
             });
         });
-        
-        // --- CHATBOT LOGIC ---
-        const toggleBtn = document.getElementById('chatbot-toggle');
-        const chatWindow = document.getElementById('chatbot-window');
-        const closeBtn = document.getElementById('chatbot-close');
-        const chatInput = document.getElementById('chat-input');
-        const sendBtn = document.getElementById('chat-send');
-        const messagesContainer = document.getElementById('chat-messages');
-        const typingIndicator = document.getElementById('typing-indicator');
-
-        toggleBtn.addEventListener('click', () => {
-            chatWindow.classList.toggle('visible');
-            if(chatWindow.classList.contains('visible')) {
-                setTimeout(() => chatInput.focus(), 300);
-            }
-        });
-
-        closeBtn.addEventListener('click', () => {
-            chatWindow.classList.remove('visible');
-        });
-
-        sendBtn.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
-
-        async function sendMessage() {
-            const text = chatInput.value.trim();
-            if (!text) return;
-
-            if (!apiKey) {
-                addMessage("⚠️ Error: API Key missing.", 'ai');
-                return;
-            }
-
-            addMessage(text, 'user');
-            chatInput.value = '';
-            
-            typingIndicator.style.display = 'block';
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-            try {
-                const reply = await callGeminiAPI(text);
-                addMessage(reply, 'ai');
-            } catch (error) {
-                console.error(error);
-                addMessage(currentLang === 'fr' ? "Désolé, j'ai un problème de connexion." : "Sorry, trouble connecting right now.", 'ai');
-            } finally {
-                typingIndicator.style.display = 'none';
-            }
-        }
-
-        function addMessage(text, sender) {
-            const div = document.createElement('div');
-            div.className = `message ${sender}`;
-            div.textContent = text;
-            messagesContainer.appendChild(div);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        async function callGeminiAPI(userQuery) {
-            // Translate the System Prompt based on language
-            const englishPrompt = "You are a helpful energy conservation assistant for Mauritius. You give specific, practical advice on how to save electricity, especially during outages in a tropical climate. Keep answers concise (under 50 words).";
-            const frenchPrompt = "Tu es un assistant utile pour la conservation de l'énergie à l'île Maurice. Donne des conseils pratiques sur la façon d'économiser l'électricité, surtout pendant les pannes dans un climat tropical. Réponses concises (moins de 50 mots).";
-            
-            const finalPrompt = currentLang === 'fr' ? frenchPrompt : englishPrompt;
-            
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            
-            const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-                systemInstruction: { parts: [{ text: finalPrompt }] }
-            };
-
-            const delays = [1000, 2000, 4000, 8000, 16000];
-            
-            for (let i = 0; i <= delays.length; i++) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        if (i < delays.length) {
-                            await new Promise(r => setTimeout(r, delays[i]));
-                            continue;
-                        }
-                        throw new Error(`API Error: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-                    return data.candidates?.[0]?.content?.parts?.[0]?.text || (currentLang === 'fr' ? "Je n'ai pas trouvé de réponse." : "I couldn't think of an answer.");
-                    
-                } catch (err) {
-                    if (i === delays.length) throw err;
-                }
-            }
-        }
 
         // Initialize
         fetchOutages();
