@@ -1,34 +1,13 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "server/server.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "client/outage.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "client/**/*",
-      "use": "@vercel/static"
+  "functions": {
+    "api/server.js": {
+      "runtime": "nodejs20.x"
     }
-  ],
+  },
   "rewrites": [
     {
-    
       "source": "/server/outages",
-      "destination": "/server/server.js"
-    },
-    {
-      
-      "source": "/:path*",
-      "destination": "/client/:path*"
-    },
-    {
-      
-      "source": "/",
-      "destination": "/client/outage.html"
+      "destination": "/api/server/outages"
     }
   ]
 }
