@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Power Outage Interactive Template</title>
+
+<style>
+/* ===============================
+   GLOBAL COLOR THEME
+================================*/
+:root {
+  --primary: #4169E1; /* Royal Blue */
+  --accent: #32CD32;  /* Safety Green */
+  --mint: #D3D3D3;    /* Light Gray for highlights */
+  --soft-bg: #FFFFFF; /* Background */
+  --card-bg: #FFFFFF; /* Card Background */
+  --text: #000000;    /* Text Color */
+  --radius: 14px;
+}
+
+body {
+  margin: 0;
+  background: var(--soft-bg);
+  font-family: 'Poppins', sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ===============================
+   ELECTRIC SPARKS / LIGHTNING
+================================*/
+.electric-spark {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 0 8px var(--accent);
+  animation: sparkPulse 0.4s ease-out forwards;
+  z-index: 9999;
+}
+
+@keyframes sparkPulse {
+  0% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0; transform: scale(0.5); }
+}
+
+/* ===============================
+   MASCOT CHARACTER
+================================*/
+.mascot {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 120px;
+  height: 120px;
+  background: url('https://i.imgur.com/OtL7W0x.png') center/contain no-repeat;
+  animation: bounceMascot 2s infinite ease-in-out;
+  cursor: pointer;
+}
+
+@keyframes bounceMascot {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.mascot-tip {
+  position: fixed;
+  bottom: 155px;
+  right: 35px;
+  background: var(--soft-bg);
+  padding: 12px 18px;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  font-size: 0.9em;
+  display: none;
+  width: 180px;
+  color: var(--text);
+}
+
+/* ===============================
+   HEADER
+================================*/
+header {
+  background: linear-gradient(120deg, var(--primary), var(--accent));
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  color: var(--soft-bg);
+}
+
+header h1 {
+  margin-bottom: 5px;
+  font-size: 2.2em;
+}
+
+nav a {
+  color: var(--soft-bg);
+  margin: 0 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+nav a:hover {
+  opacity: 0.8;
+}
+
+/* ===============================
+   CONTAINER
+================================*/
+.container {
+  width: 90%;
+  max-width: 1000px;
+  margin: auto;
+  padding: 40px 0;
+}
+
+/* ===============================
+   SECTION TITLES
+================================*/
+section h2 {
+  color: var(--primary);
+  text-shadow: 0 0 6px rgba(65,105,225,0.2);
+}
+
+/* ===============================
+   CARDS GRID - 3 per row
+================================*/
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin: 40px 0 60px 0;
+}
+
+@media (max-width: 900px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===============================
+   COLORFUL CARDS
+================================*/
+.card {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 18px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  padding: 3px;
+  background: linear-gradient(45deg, var(--primary), var(--mint), var(--accent), var(--primary));
+  background-size: 300% 300%;
+  animation: rainbow 4s ease infinite;
+  z-index: -1;
+}
+
+@keyframes rainbow {
+  0%,100% { background-position: 0% 50%; }
+  50%     { background-position: 100% 50%; }
+}
+
+.card-title {
+  font-size: 1.3em;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.card-content {
+  display: none;
+  color: var(--text);
+}
+
+.card.expanded {
+  transform: translateY(-6px);
+}
+.card.expanded .card-content {
+  display: block;
+  margin-top: 10px;
+}
+
+/* ===============================
+   QUIZ SECTION
+================================*/
+.quiz {
+  background: var(--card-bg);
+  padding: 25px;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 18px rgba(0,0,0,0.05);
+  border-top: 6px solid var(--mint);
+  margin-bottom: 80px;
+}
+
+.quiz-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  color: var(--text);
+}
+
+.quiz-item input {
+  transform: scale(1.3);
+  margin-right: 12px;
+}
+
+button {
+  background: var(--primary);
+  color: var(--soft-bg);
+  padding: 12px 22px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: 0.3s;
+}
+button:hover {
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+}
+
+.feedback {
+  margin-top: 15px;
+  padding: 12px;
+  background: var(--mint);
+  border-radius: var(--radius);
+  display: none;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* ===============================
+   FOOTER
+================================*/
+footer {
+  text-align: center;
+  padding: 25px;
+  margin-top: 50px;
+  background: #fdf7eb;
+  font-size: 0.9em;
+  color: var(--text);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🌟 Power Outage Learning Hub</h1>
+  <nav>
+    <a href="#cards">Info Cards</a>
+    <a href="#quiz">Quiz</a>
+    <a href="#about">About</a>
+  </nav>
+</header>
+
+<div class="container">
+
+  <!-- ============================
+       CARDS
+  ============================ -->
+  <section id="cards">
+    <h2>Interactive Cards</h2>
+    <p>Click a card to reveal power outage safety tips.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-title">💡 Emergency Lighting</div>
+        <div class="card-content">
+          <p>Always keep flashlights or candles ready.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">⚡ Safety First</div>
+        <div class="card-content">
+          <p>Turn off appliances to avoid surges.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🌟 Tips & Tricks</div>
+        <div class="card-content">
+          <p>Check your emergency kit and signal safety zones.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🕯️ Candle Safety</div>
+        <div class="card-content">
+          <p>Never leave candles unattended during a blackout.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🔌 Power Management</div>
+        <div class="card-content">
+          <p>Unplug sensitive electronics to prevent damage.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📱 Communication</div>
+        <div class="card-content">
+          <p>Keep phones charged and use only essential calls.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       QUIZ
+  ============================ -->
+  <section id="quiz" class="quiz">
+    <h2>Power Outage Quiz</h2>
+    <p>Select the correct statements:</p>
+
+    <div class="quiz-item">
+      <input type="checkbox" class="quiz-check" data-correct="true">
+      <label>Keep flashlights or emergency lights ready.</label>
+    </div>
+
+    <div class="quiz-item">
+      <input type="checkbox" class="quiz-check" data-correct="false">
+      <label>Leave all appliances on during a blackout.</label>
+    </div>
+
+    <div class="quiz-item">
+      <input type="checkbox" class="quiz-check" data-correct="true">
+      <label>Turn off unnecessary electrical devices to prevent surges.</label>
+    </div>
+
+    <button id="checkAnswers">Check My Answers</button>
+    <div class="feedback" id="feedback"></div>
+  </section>
+
+  <!-- ============================
+       ABOUT
+  ============================ -->
+  <section id="about">
+    <h2>About This Template</h2>
+    <p>
+      This interactive template uses Royal Blue, Light Gray, and Safety Green to convey a power outage theme.
+      Electric sparks simulate playful electricity in the background.
+    </p>
+  </section>
+
+</div>
+
+<footer>
+  © 2025 Power Outage Interactive Template | HTML, CSS & JavaScript
+</footer>
+
+<!-- MASCOT & MESSAGE -->
+<div class="mascot"></div>
+<div class="mascot-tip">Click cards to learn safety tips! ⚡</div>
+
+<script>
+// Mascot speech bubble toggle
+const mascot = document.querySelector(".mascot");
+const tip = document.querySelector(".mascot-tip");
+mascot.addEventListener("click", () => {
+  tip.style.display = tip.style.display === "block" ? "none" : "block";
+});
+
+// Expandable cards
+document.querySelectorAll(".card").forEach(card => {
+  card.addEventListener("click", () => {
+    card.classList.toggle("expanded");
+  });
+});
+
+// Quiz Logic
+document.getElementById("checkAnswers").addEventListener("click", () => {
+  const checks = document.querySelectorAll(".quiz-check");
+  let correct = 0, totalCorrect = 0;
+
+  checks.forEach(c => {
+    if (c.dataset.correct === "true") totalCorrect++;
+    if (c.checked && c.dataset.correct === "true") correct++;
+  });
+
+  const fb = document.getElementById("feedback");
+  fb.style.display = "block";
+
+  if (correct === totalCorrect) {
+    fb.textContent = "Perfect! ✅ You're prepared for power outages!";
+    fb.style.background = "var(--mint)";
+  } else {
+    fb.textContent = `You got ${correct}/${totalCorrect}. Keep learning!`;
+    fb.style.background = "var(--yellow)";
+  }
+});
+
+// ELECTRIC SPARKS GENERATOR
+function createElectricSpark() {
+  const spark = document.createElement('div');
+  spark.className = 'electric-spark';
+  spark.style.left = Math.random() * window.innerWidth + 'px';
+  spark.style.top = Math.random() * window.innerHeight + 'px';
+  const size = Math.random() * 6 + 4;
+  spark.style.width = size + 'px';
+  spark.style.height = size + 'px';
+  document.body.appendChild(spark);
+  setTimeout(() => spark.remove(), 400);
+}
+
+setInterval(() => {
+  if (Math.random() < 0.5) createElectricSpark();
+}, 300);
+
+// RANDOM MASCOT POP-OUT
+function randomMascotPop() {
+  const maxPop = 25; // pixels
+  const duration = 0.5; // seconds
+
+  mascot.style.transition = `transform ${duration}s ease-out`;
+  mascot.style.transform = `translateY(-${maxPop}px)`;
+
+  setTimeout(() => {
+    mascot.style.transform = `translateY(0)`;
+  }, duration * 1000);
+}
+
+// Pop mascot randomly every 3-8 seconds
+setInterval(() => {
+  if (Math.random() < 0.7) randomMascotPop();
+}, 4000);
+</script>
+
+</body>
+</html>

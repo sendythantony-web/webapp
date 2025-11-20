@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Power Outage Interactive Template</title>
+
+<style>
+/* ===============================
+   GLOBAL COLOR THEME
+================================*/
+:root {
+  --primary: #4169E1; /* Royal Blue (Kept from original) */
+  --accent: #32CD32;  /* Safety Green (Kept from original) */
+  --safety-orange: #FF8C00; /* NEW: For Awareness/Alerts */
+  --mint: #D3D3D3;    /* Light Gray */
+  --soft-bg: #FFFFFF; 
+  --card-bg: #FFFFFF; 
+  --text: #000000;    
+  --radius: 14px;
+}
+
+/* ===============================
+   1. UPDATED BACKGROUND TEXTURE
+   (Technical Safety Grid)
+================================*/
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+  position: relative;
+  
+  /* NEW BACKGROUND: Subtle Technical Grid */
+  background-color: #fffcf5; /* Very warm white */
+  background-image: 
+    linear-gradient(rgba(255, 140, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 140, 0, 0.05) 1px, transparent 1px);
+  background-size: 25px 25px; /* Creates a blueprint/grid effect */
+}
+
+/* ===============================
+   ELECTRIC SPARKS / LIGHTNING
+================================*/
+.electric-spark {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: var(--safety-orange); /* Updated to match safety theme */
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 0 8px var(--safety-orange);
+  animation: sparkPulse 0.4s ease-out forwards;
+  z-index: 9999;
+}
+
+@keyframes sparkPulse {
+  0% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0; transform: scale(0.5); }
+}
+
+/* ===============================
+   MASCOT CHARACTER
+================================*/
+.mascot {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 120px;
+  height: 120px;
+  background: url('https://i.imgur.com/OtL7W0x.png') center/contain no-repeat;
+  animation: bounceMascot 2s infinite ease-in-out;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+@keyframes bounceMascot {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.mascot-tip {
+  position: fixed;
+  bottom: 155px;
+  right: 35px;
+  background: var(--soft-bg);
+  padding: 12px 18px;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  font-size: 0.9em;
+  display: none;
+  width: 180px;
+  color: var(--text);
+  z-index: 1000;
+}
+
+/* ===============================
+   HEADER
+================================*/
+/* ===============================
+   EDUCATIONAL HUB HEADER
+================================*/
+header {
+  /* Dark Slate Blue: Professional, trustworthy, educational */
+  background-color: #1e2a38; 
+  /* Orange Bottom Border: Keeps the "Safety" context subtle */
+  border-bottom: 4px solid var(--safety-orange);
+  padding: 20px 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  position: sticky; /* Keeps navigation accessible while reading */
+  top: 0;
+  z-index: 999;
+}
+
+/* Inner container to align items neatly */
+.header-content {
+  width: 90%;
+  max-width: 1000px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Responsive: Stack items on mobile */
+@media (max-width: 768px) {
+  .header-content { flex-direction: column; text-align: center; gap: 15px; }
+  nav { width: 100%; justify-content: center; }
+}
+
+.logo-section {
+  display: flex;
+  flex-direction: column;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.8em;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* The "Education/Awareness" Tagline */
+.tagline {
+  color: #aab7c4; /* Soft grey for secondary info */
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* Navigation styled as 'Learning Modules' */
+nav {
+  display: flex;
+  gap: 10px;
+}
+
+nav a {
+  color: #e0e6ed;
+  background: rgba(255,255,255,0.05);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+/* Hover effect: Highlights the active learning path */
+nav a:hover {
+  background: rgba(255, 140, 0, 0.15); /* Faint orange bg */
+  color: var(--safety-orange);
+  border-color: var(--safety-orange);
+  transform: translateY(-2px);
+}
+
+/* ===============================
+   CONTAINER
+================================*/
+.container {
+  width: 90%;
+  max-width: 1000px;
+  margin: auto;
+  padding: 40px 0;
+}
+
+/* ===============================
+   SECTION TITLES
+================================*/
+section h2 {
+  color: var(--primary);
+  text-shadow: 0 0 6px rgba(65,105,225,0.2);
+}
+
+/* ===============================
+   CARDS GRID
+================================*/
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin: 40px 0 60px 0;
+}
+
+@media (max-width: 900px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===============================
+   2. UPDATED CARD DESIGN
+   (Safety Awareness Style)
+================================*/
+.card {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  
+  /* NEW LOOK: Clean card with Safety Orange Accent */
+  border: 1px solid #eaeaea;
+  border-top: 5px solid var(--safety-orange); /* High-vis accent */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+
+/* Hover Effect: "Energized" Glow */
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(255, 140, 0, 0.25); /* Orange glow */
+  border-color: var(--safety-orange);
+}
+
+.card-title {
+  font-size: 1.3em;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-content {
+  display: none;
+  color: var(--text);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #ddd; /* Dashed line for technical feel */
+}
+
+.card.expanded {
+  transform: translateY(-6px);
+}
+.card.expanded .card-content {
+  display: block;
+}
+
+/* ===============================
+   SIMULATOR STYLES
+================================*/
+.sim-wrapper {
+  background: #f2f6ff; /* Original simulator bg */
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(15,23,36,0.06);
+  margin-bottom: 80px;
+  border: 1px solid #eef2f7;
+  color: #0f1724;
+}
+
+.sim-lead { text-align:center; color:#555; margin-top:0; font-size: 0.95em; }
+.sim-grid { display:grid; grid-template-columns:1fr; gap:14px; }
+@media(min-width:900px){ .sim-grid{grid-template-columns:1fr 1fr} }
+
+.sim-card {
+  background:#fff; 
+  padding:14px; 
+  border-radius:12px; 
+  box-shadow:0 2px 8px rgba(2,6,23,0.04);
+  border: 1px solid #eaeaea;
+}
+
+.sim-label { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-weight:600; }
+.sim-small { font-size:13px; color:#555; }
+
+.sim-card input[type=range] { width:100%; margin: 10px 0; cursor: pointer; }
+
+.sim-results { padding:18px; border-radius:12px; margin-top:12px; transition:background .25s; }
+.sim-result-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px dashed #caced3; }
+.sim-result-row:last-child { border-bottom:none; }
+.sim-result-title { display:flex; gap:8px; align-items:center; font-weight: 500;}
+.sim-result-number { font-weight:700; }
+
+.sim-equiv { font-size:13px; color:#555; }
+.sim-risk { margin-top:10px; font-weight:700; }
+
+/* ===============================
+   QUIZ SECTION
+================================*/
+.quiz {
+  background: var(--card-bg);
+  padding: 25px;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 18px rgba(0,0,0,0.05);
+  border-top: 6px solid var(--mint);
+  margin-bottom: 80px;
+}
+
+.quiz-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  color: var(--text);
+}
+
+.quiz-item input {
+  transform: scale(1.3);
+  margin-right: 12px;
+}
+
+button {
+  background: var(--primary);
+  color: var(--soft-bg);
+  padding: 12px 22px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: 0.3s;
+}
+button:hover {
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+}
+
+.feedback {
+  margin-top: 15px;
+  padding: 12px;
+  background: var(--mint);
+  border-radius: var(--radius);
+  display: none;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* ===============================
+   FOOTER
+================================*/
+footer {
+  text-align: center;
+  padding: 25px;
+  margin-top: 50px;
+  background: #fdf7eb;
+  font-size: 0.9em;
+  color: var(--text);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-content">
+    
+    <div class="logo-section">
+      <!--<h1>💡 Power Outage <span style="color:var(--safety-orange)">Hub</span></h1>-->
+      <h1><span class="tagline">Education • Awareness • Safety</span></h1>
+    </div>
+
+    <nav>
+      <a href="#cards">Safety Tips</a>
+      <a href="#simulator">Energy Sim</a>
+      <a href="#quiz">Knowledge Check</a>
+    </nav>
+
+  </div>
+</header>
+
+<div class="container">
+
+  <section id="cards">
+    <!--<h2>Interactive Cards</h2>-->
+    <p>Click a card to reveal power outage safety tips.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-title">💡 Emergency Lighting</div>
+        <div class="card-content">
+          <p>Always keep flashlights or candles ready.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">⚡ Safety First</div>
+        <div class="card-content">
+          <p>Turn off appliances to avoid surges.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🌟 Tips & Tricks</div>
+        <div class="card-content">
+          <p>Check your emergency kit and signal safety zones.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🕯️ Candle Safety</div>
+        <div class="card-content">
+          <p>Never leave candles unattended during a blackout.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🔌 Power Management</div>
+        <div class="card-content">
+          <p>Unplug sensitive electronics to prevent damage.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📱 Communication</div>
+        <div class="card-content">
+          <p>Keep phones charged and use only essential calls.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <section id="quiz" class="quiz">
+    <h2 data-i18n="quizTitle">Power Outage Quiz</h2>
+    <p data-i18n="quizDesc">Select the statements that are TRUE:</p>
+
+    <div class="quiz-item">
+      <input type="checkbox" class="quiz-check" data-correct="true">
+      <label>Flashlights are safer than candles during a blackout.</label>
+    </div>
+
+    <div class="quiz-item">
+      <input type="checkbox" class="quiz-check" data-correct="false">
+      <label>You should open the fridge often to check if food is cold.</label>
+    </div>
+
+    <div class="quiz-item">
+      <input type="checkbox" class="quiz-check" data-correct="true">
+      <label>Unplug computers and TVs to prevent damage from power surges.</label>
+    </div>
+
+    <div class="quiz-item">
+      <input type="checkbox" class="quiz-check" data-correct="false">
+      <label>It is safe to touch fallen power lines if you use a stick.</label>
+    </div>
+
+    <div class="quiz-item">
+      <input type="checkbox" class="quiz-check" data-correct="true">
+      <label>A closed refrigerator keeps food cold for about 4 hours.</label>
+    </div>
+
+    <button id="checkAnswers" data-i18n="btnCheck">Check My Answers</button>
+    <div class="feedback" id="feedback"></div>
+  </section>
+
+  <section id="simulator">
+    <h2>Energy Consumption Simulator</h2>
+    <div class="sim-wrapper">
+        <p class="sim-lead">Use the sliders to estimate monthly kWh and receive your Energy Consumption risk level.</p>
+        
+        <div class="sim-grid">
+          <div>
+            <div class="sim-card">
+              <div class="sim-label">🌀 Fan (hours/day) <span id="fanValue">6</span></div>
+              <input type="range" min="0" max="24" value="6" id="fanSlider" />
+              <div class="sim-small">Typical power: <strong>60 W</strong></div>
+            </div>
+    
+            <div class="sim-card" style="margin-top:12px">
+              <div class="sim-label">🚿 Water Heater (minutes/shower) <span id="showerValue">8</span></div>
+              <input type="range" min="0" max="20" value="8" id="showerSlider" />
+              <div class="sim-small">Typical power: <strong>2000 W</strong></div>
+            </div>
+    
+            <div class="sim-card" style="margin-top:12px">
+              <div class="sim-label">🧊 Fridge Level (1–7) <span id="fridgeValue">3</span></div>
+              <input type="range" min="1" max="7" value="3" id="fridgeSlider" />
+              <div class="sim-small">Base consumption used: <strong>30 kWh/month</strong></div>
+            </div>
+    
+            <div class="sim-card" style="margin-top:12px">
+              <div class="sim-label">❄️ Air Conditioner (hours/day) <span id="acValue">4</span></div>
+              <input type="range" min="0" max="24" value="4" id="acSlider" />
+              <div class="sim-small">Typical power: <strong>1200 W (1.2 kW)</strong></div>
+            </div>
+    
+            <div class="sim-card" style="margin-top:12px">
+              <div class="sim-label">🍞 Oven (minutes/day) <span id="ovenValue">30</span></div>
+              <input type="range" min="0" max="120" value="30" id="ovenSlider" />
+              <div class="sim-small">Typical power: <strong>2000 W (2 kW)</strong></div>
+            </div>
+    
+          </div>
+    
+          <div>
+            <div class="sim-card">
+              <div class="sim-label">🧺 Washing Machine (cycles/week) <span id="washValue">3</span></div>
+              <input type="range" min="0" max="14" value="3" id="washSlider" />
+              <div class="sim-small">Typical energy: <strong>1.0 kWh per cycle</strong></div>
+            </div>
+    
+            <div class="sim-card" style="margin-top:12px">
+              <div class="sim-label">🍽️ Dishwasher (cycles/week) <span id="dishValue">2</span></div>
+              <input type="range" min="0" max="14" value="2" id="dishSlider" />
+              <div class="sim-small">Typical energy: <strong>1.5 kWh per cycle</strong></div>
+            </div>
+    
+            <div class="sim-card" style="margin-top:12px">
+              <div class="sim-label">🍳 Electric Stove (minutes/day) <span id="stoveValue">20</span></div>
+              <input type="range" min="0" max="180" value="20" id="stoveSlider" />
+              <div class="sim-small">Typical power: <strong>2000 W (2 kW)</strong></div>
+            </div>
+    
+            <div class="sim-card" style="margin-top:12px">
+              <div class="sim-label">💧 Water Pump (minutes/day) <span id="pumpValue">15</span></div>
+              <input type="range" min="0" max="60" value="15" id="pumpSlider" />
+              <div class="sim-small">Typical power: <strong>750 W (0.75 kW)</strong></div>
+            </div>
+    
+          </div>
+        </div>
+    
+        <div id="resultsBox" class="sim-results sim-card" style="background:#eef3ff;">
+          <h3 style="margin:0 0 8px 0">Estimated Monthly Usage</h3>
+    
+          <div class="sim-result-row">
+            <div class="sim-result-title">🌀 Fan</div>
+            <div>
+              <div class="sim-result-number" id="fanKwh">0</div>
+              <div class="sim-equiv" id="fanEquivalent"></div>
+            </div>
+          </div>
+    
+          <div class="sim-result-row">
+            <div class="sim-result-title">🚿 Water Heater</div>
+            <div>
+              <div class="sim-result-number" id="showerKwh">0</div>
+              <div class="sim-equiv" id="showerEquivalent"></div>
+            </div>
+          </div>
+    
+          <div class="sim-result-row">
+            <div class="sim-result-title">🧊 Fridge</div>
+            <div>
+              <div class="sim-result-number" id="fridgeKwh">0</div>
+              <div class="sim-equiv" id="fridgeEquivalent"></div>
+            </div>
+          </div>
+    
+          <div class="sim-result-row">
+            <div class="sim-result-title">❄️ AC</div>
+            <div>
+              <div class="sim-result-number" id="acKwh">0</div>
+              <div class="sim-equiv" id="acEquivalent"></div>
+            </div>
+          </div>
+    
+          <div class="sim-result-row">
+            <div class="sim-result-title">🍞 Oven</div>
+            <div>
+              <div class="sim-result-number" id="ovenKwh">0</div>
+              <div class="sim-equiv" id="ovenEquivalent"></div>
+            </div>
+          </div>
+    
+          <div class="sim-result-row">
+            <div class="sim-result-title">🧺 Washing Machine</div>
+            <div>
+              <div class="sim-result-number" id="washKwh">0</div>
+              <div class="sim-equiv" id="washEquivalent"></div>
+            </div>
+          </div>
+    
+          <div class="sim-result-row">
+            <div class="sim-result-title">🍽️ Dishwasher</div>
+            <div>
+              <div class="sim-result-number" id="dishKwh">0</div>
+              <div class="sim-equiv" id="dishEquivalent"></div>
+            </div>
+          </div>
+    
+          <div class="sim-result-row">
+            <div class="sim-result-title">🍳 Electric Stove</div>
+            <div>
+              <div class="sim-result-number" id="stoveKwh">0</div>
+              <div class="sim-equiv" id="stoveEquivalent"></div>
+            </div>
+          </div>
+    
+          <div class="sim-result-row">
+            <div class="sim-result-title">💧 Water Pump</div>
+            <div>
+              <div class="sim-result-number" id="pumpKwh">0</div>
+              <div class="sim-equiv" id="pumpEquivalent"></div>
+            </div>
+          </div>
+    
+          <hr style="margin:12px 0; border: 0; border-top: 1px solid #ccc;" />
+          <div style="display:flex; justify-content:space-between; align-items:center">
+            <div>
+              <div class="sim-small">Total monthly consumption</div>
+              <div class="sim-result-number" id="totalKwh">0</div>
+            </div>
+            <div style="text-align:right">
+              <div class="sim-risk" id="riskLevel"></div>
+              <div class="sim-small" id="compareText"></div>
+            </div>
+          </div>
+    
+        </div>
+    </div>
+  </section>
+
+
+
+  <section id="about">
+    <h2>About This Template</h2>
+    <p>
+      This interactive template uses Royal Blue, Light Gray, and Safety Green to convey a power outage theme.
+      Electric sparks simulate playful electricity in the background.
+    </p>
+  </section>
+
+</div>
+
+<footer>
+  © 2025 Power Outage Interactive Template | HTML, CSS & JavaScript
+</footer>
+
+<div class="mascot"></div>
+<div class="mascot-tip">Click cards to learn safety tips! ⚡</div>
+
+<script>
+/* ===============================
+   EXISTING EDUCATION10 SCRIPTS
+================================*/
+// Mascot speech bubble toggle
+const mascot = document.querySelector(".mascot");
+const tip = document.querySelector(".mascot-tip");
+mascot.addEventListener("click", () => {
+  tip.style.display = tip.style.display === "block" ? "none" : "block";
+});
+
+// Expandable cards
+document.querySelectorAll(".card").forEach(card => {
+  card.addEventListener("click", () => {
+    card.classList.toggle("expanded");
+  });
+});
+
+// Quiz Logic
+document.getElementById("checkAnswers").addEventListener("click", () => {
+  const checks = document.querySelectorAll(".quiz-check");
+  let correct = 0, totalCorrect = 0;
+
+  checks.forEach(c => {
+    if (c.dataset.correct === "true") totalCorrect++;
+    if (c.checked && c.dataset.correct === "true") correct++;
+  });
+
+  const fb = document.getElementById("feedback");
+  fb.style.display = "block";
+
+  if (correct === totalCorrect) {
+    fb.textContent = "Perfect! ✅ You're prepared for power outages!";
+    fb.style.background = "var(--mint)";
+  } else {
+    fb.textContent = `You got ${correct}/${totalCorrect}. Keep learning!`;
+    fb.style.background = "var(--yellow)";
+  }
+});
+
+// ELECTRIC SPARKS GENERATOR
+function createElectricSpark() {
+  const spark = document.createElement('div');
+  spark.className = 'electric-spark';
+  spark.style.left = Math.random() * window.innerWidth + 'px';
+  spark.style.top = Math.random() * window.innerHeight + 'px';
+  const size = Math.random() * 6 + 4;
+  spark.style.width = size + 'px';
+  spark.style.height = size + 'px';
+  document.body.appendChild(spark);
+  setTimeout(() => spark.remove(), 400);
+}
+
+setInterval(() => {
+  if (Math.random() < 0.5) createElectricSpark();
+}, 300);
+
+// RANDOM MASCOT POP-OUT
+function randomMascotPop() {
+  const maxPop = 25; // pixels
+  const duration = 0.5; // seconds
+
+  mascot.style.transition = `transform ${duration}s ease-out`;
+  mascot.style.transform = `translateY(-${maxPop}px)`;
+
+  setTimeout(() => {
+    mascot.style.transform = `translateY(0)`;
+  }, duration * 1000);
+}
+
+// Pop mascot randomly every 3-8 seconds
+setInterval(() => {
+  if (Math.random() < 0.7) randomMascotPop();
+}, 4000);
+
+/* ===============================
+   SIMULATOR LOGIC (Merged)
+================================*/
+    // Elements
+    const simElements = {
+      fanSlider: document.getElementById('fanSlider'), fanValue: document.getElementById('fanValue'), fanKwh: document.getElementById('fanKwh'), fanEquivalent: document.getElementById('fanEquivalent'),
+      showerSlider: document.getElementById('showerSlider'), showerValue: document.getElementById('showerValue'), showerKwh: document.getElementById('showerKwh'), showerEquivalent: document.getElementById('showerEquivalent'),
+      fridgeSlider: document.getElementById('fridgeSlider'), fridgeValue: document.getElementById('fridgeValue'), fridgeKwh: document.getElementById('fridgeKwh'), fridgeEquivalent: document.getElementById('fridgeEquivalent'),
+      acSlider: document.getElementById('acSlider'), acValue: document.getElementById('acValue'), acKwh: document.getElementById('acKwh'), acEquivalent: document.getElementById('acEquivalent'),
+      ovenSlider: document.getElementById('ovenSlider'), ovenValue: document.getElementById('ovenValue'), ovenKwh: document.getElementById('ovenKwh'), ovenEquivalent: document.getElementById('ovenEquivalent'),
+      washSlider: document.getElementById('washSlider'), washValue: document.getElementById('washValue'), washKwh: document.getElementById('washKwh'), washEquivalent: document.getElementById('washEquivalent'),
+      dishSlider: document.getElementById('dishSlider'), dishValue: document.getElementById('dishValue'), dishKwh: document.getElementById('dishKwh'), dishEquivalent: document.getElementById('dishEquivalent'),
+      stoveSlider: document.getElementById('stoveSlider'), stoveValue: document.getElementById('stoveValue'), stoveKwh: document.getElementById('stoveKwh'), stoveEquivalent: document.getElementById('stoveEquivalent'),
+      pumpSlider: document.getElementById('pumpSlider'), pumpValue: document.getElementById('pumpValue'), pumpKwh: document.getElementById('pumpKwh'), pumpEquivalent: document.getElementById('pumpEquivalent'),
+      totalKwh: document.getElementById('totalKwh'), riskLevel: document.getElementById('riskLevel'), resultsBox: document.getElementById('resultsBox'), compareText: document.getElementById('compareText')
+    };
+
+    // Assumed power / consumption constants
+    const P = {
+      fan: 0.06, // kW
+      waterHeater: 2.0, // kW
+      fridgeBase: 30, // kWh/month base
+      ac: 1.2, // kW
+      oven: 2.0, // kW
+      washPerCycle: 1.0, // kWh per cycle
+      dishPerCycle: 1.5, // kWh per cycle
+      stove: 2.0, // kW
+      pump: 0.75 // kW
+    };
+
+    // Utility: convert minutes to hours
+    const minsToHours = m => m/60;
+    // Weeks to months approximate factor
+    const weeksPerMonth = 4.345; // average
+
+    function calcAll(){
+      // Read values
+      const fanH = Number(simElements.fanSlider.value);
+      const showerMin = Number(simElements.showerSlider.value);
+      const fridgeLevel = Number(simElements.fridgeSlider.value);
+      const acH = Number(simElements.acSlider.value);
+      const ovenMin = Number(simElements.ovenSlider.value);
+      const washPerWeek = Number(simElements.washSlider.value);
+      const dishPerWeek = Number(simElements.dishSlider.value);
+      const stoveMin = Number(simElements.stoveSlider.value);
+      const pumpMin = Number(simElements.pumpSlider.value);
+
+      // Update labels
+      simElements.fanValue.textContent = fanH;
+      simElements.showerValue.textContent = showerMin;
+      simElements.fridgeValue.textContent = fridgeLevel;
+      simElements.acValue.textContent = acH;
+      simElements.ovenValue.textContent = ovenMin;
+      simElements.washValue.textContent = washPerWeek;
+      simElements.dishValue.textContent = dishPerWeek;
+      simElements.stoveValue.textContent = stoveMin;
+      simElements.pumpValue.textContent = pumpMin;
+
+      // Monthly kWh calculations
+      const fan_kwh = P.fan * fanH * 30;
+      const shower_kwh = P.waterHeater * minsToHours(showerMin) * 30; // assuming 1 shower/day
+      const fridge_kwh = P.fridgeBase + Math.max(0, fridgeLevel - 3) * 5; // as used before
+      const ac_kwh = P.ac * acH * 30;
+      const oven_kwh = P.oven * minsToHours(ovenMin) * 30;
+      const wash_kwh = P.washPerCycle * (washPerWeek * weeksPerMonth);
+      const dish_kwh = P.dishPerCycle * (dishPerWeek * weeksPerMonth);
+      const stove_kwh = P.stove * minsToHours(stoveMin) * 30;
+      const pump_kwh = P.pump * minsToHours(pumpMin) * 30;
+
+      // Set display
+      simElements.fanKwh.textContent = fan_kwh.toFixed(2);
+      simElements.showerKwh.textContent = shower_kwh.toFixed(2);
+      simElements.fridgeKwh.textContent = fridge_kwh.toFixed(2);
+      simElements.acKwh.textContent = ac_kwh.toFixed(2);
+      simElements.ovenKwh.textContent = oven_kwh.toFixed(2);
+      simElements.washKwh.textContent = wash_kwh.toFixed(2);
+      simElements.dishKwh.textContent = dish_kwh.toFixed(2);
+      simElements.stoveKwh.textContent = stove_kwh.toFixed(2);
+      simElements.pumpKwh.textContent = pump_kwh.toFixed(2);
+
+      // COST CALCULATION
+        const cebRate = 6.5; // Rs per kWh (simple average household tariff)
+
+        // Cost equivalents (monthly cost per appliance)
+        simElements.fanEquivalent.textContent          = `≈ 💰 Costs about Rs ${(fan_kwh * cebRate).toFixed(2)} / month`;
+        simElements.showerEquivalent.textContent       = `≈ 💰 Costs about Rs ${(shower_kwh * cebRate).toFixed(2)} / month`;
+        simElements.fridgeEquivalent.textContent       = `≈ 💰 Costs about Rs ${(fridge_kwh * cebRate).toFixed(2)} / month`;
+        simElements.acEquivalent.textContent           = `≈ 💰 Costs about Rs ${(ac_kwh * cebRate).toFixed(2)} / month`;
+        simElements.ovenEquivalent.textContent         = `≈ 💰 Costs about Rs ${(oven_kwh * cebRate).toFixed(2)} / month`;
+        simElements.washEquivalent.textContent         = `≈ 💰 Costs about Rs ${(wash_kwh * cebRate).toFixed(2)} / month`;
+        simElements.dishEquivalent.textContent         = `≈ 💰 Costs about Rs ${(dish_kwh * cebRate).toFixed(2)} / month`;
+        simElements.stoveEquivalent.textContent        = `≈ 💰 Costs about Rs ${(stove_kwh * cebRate).toFixed(2)} / month`;
+        simElements.pumpEquivalent.textContent         = `≈ 💰 Costs about Rs ${(pump_kwh * cebRate).toFixed(2)} / month`;
+
+      // Total
+      const total = fan_kwh + shower_kwh + fridge_kwh + ac_kwh + oven_kwh + wash_kwh + dish_kwh + stove_kwh + pump_kwh;
+      simElements.totalKwh.textContent = total.toFixed(2);
+
+      // Risk colouring & comparison (using simple bands)
+      updateRiskLevel(total);
+
+      // Comparison text
+      const mauAvg = 190; // approximate average (as used earlier)
+      const diff = Math.round(total - mauAvg);
+      simElements.compareText.textContent = diff >= 0 ? `▲ ${diff} kWh above Mauritius avg (${mauAvg} kWh)` : `▼ ${Math.abs(diff)} kWh below Mauritius avg (${mauAvg} kWh)`;
+    }
+
+    function updateRiskLevel(total){
+      const box = simElements.resultsBox;
+      const label = simElements.riskLevel;
+      if (total < 120){ box.style.background = '#d5f8d5'; label.style.color = '#0a7a0a'; label.textContent = '🟢 Low usage (Energy efficient)'; }
+      else if (total < 170){ box.style.background = '#fff6c7'; label.style.color = '#c19700'; label.textContent = '🟡 Normal usage (Around Mauritius avg)'; }
+      else if (total < 230){ box.style.background = '#ffe1b3'; label.style.color = '#c26b00'; label.textContent = '🟠 High usage'; }
+      else { box.style.background = '#ffcccc'; label.style.color = '#b30000'; label.textContent = '🔴 Very high usage (Expensive bill)'; }
+    }
+
+    // Wire up events
+    const sliders = ['fanSlider','showerSlider','fridgeSlider','acSlider','ovenSlider','washSlider','dishSlider','stoveSlider','pumpSlider'];
+    sliders.forEach(id => { const el = document.getElementById(id); if(el) el.addEventListener('input', calcAll); });
+
+    // Initialize
+    calcAll();
+
+</script>
+
+</body>
+</html>
