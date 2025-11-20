@@ -79,21 +79,20 @@
         }
 
         /* Language Toggle */
-        #lang-toggle {
-            background: var(--safety-orange);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 0.85em;
-            margin-left: 10px;
-            transition: background 0.3s;
+        
+        .lang-btn {
+        background: var(--safety-orange);
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 0.85em;
+        margin-left: 15px;
+        transition: 0.2s;
         }
-        #lang-toggle:hover {
-            background: #e67e00;
-        }
+        .lang-btn:hover { background: #e07b00; }
 
         /* =============================== PAGE BASE ============================== */
         * {
@@ -489,7 +488,7 @@
                 <a href="index.html" data-i18n="navHome">Home</a>
                 <a href="outage.html" data-i18n="navOutage">Outage Status</a>
                 <a href="education6.html" data-i18n="navHub">Education Hub</a>
-                <button id="lang-toggle">FR</button>
+                <button class="lang-btn" onclick="toggleLanguage()">FR | EN</button>
             </nav>
         </div>
     </header>
@@ -603,6 +602,17 @@
                 activeLabel: "Pannes Actives"
             }
         };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'fr' : 'en';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLang][key]) {
+                el.textContent = translations[currentLang][key];
+                }
+            });
+            calcAll();
+            }
         
         // Mapping raw API values to Display Names (English and French)
         const DISTRICT_MAPPING = {
