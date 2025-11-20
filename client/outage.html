@@ -66,41 +66,17 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
-        .filter-btn.active {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
+        /* Filter Button Styles */
+        .filter-btn[data-filter="active"] { background: #e5e7eb; color: #4b5563; }
+        .filter-btn[data-filter="active"].active { background: #ef4444; color: white; }
 
-        /* Removed 'all' button styles */
-        /* .filter-btn[data-filter="all"] {
-            background: #667eea;
-            color: white;
-        }
+        .filter-btn[data-filter="upcoming"] { background: #e5e7eb; color: #4b5563; }
+        .filter-btn[data-filter="upcoming"].active { background: #eab308; color: white; }
 
-        .filter-btn[data-filter="all"]:not(.active) {
-            background: #e5e7eb;
-            color: #4b5563;
-        } */
+        .filter-btn[data-filter="districts"] { background: #e5e7eb; color: #4b5563; }
+        .filter-btn[data-filter="districts"].active { background: #6366f1; color: white; }
 
-        .filter-btn[data-filter="active"] {
-            background: #ef4444;
-            color: white;
-        }
-
-        .filter-btn[data-filter="active"]:not(.active) {
-            background: #e5e7eb;
-            color: #4b5563;
-        }
-
-        .filter-btn[data-filter="upcoming"] {
-            background: #eab308;
-            color: white;
-        }
-
-        .filter-btn[data-filter="upcoming"]:not(.active) {
-            background: #e5e7eb;
-            color: #4b5563;
-        }
-
+        /* Card Styles */
         .card {
             background: white;
             border-radius: 12px;
@@ -110,6 +86,7 @@
             transition: all 0.3s;
             display: flex;
             gap: 16px;
+            border-left: 5px solid transparent; /* Prepare for border coloring */
         }
 
         .card:hover {
@@ -135,20 +112,9 @@
             50% { opacity: 0.5; }
         }
 
-        .status-light.active {
-            background: #ef4444;
-            box-shadow: 0 0 10px #ef4444;
-        }
-
-        .status-light.upcoming {
-            background: #eab308;
-            box-shadow: 0 0 10px #eab308;
-        }
-
-        .status-light.past {
-            background: #22c55e;
-            box-shadow: 0 0 10px #22c55e;
-        }
+        .status-light.active { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+        .status-light.upcoming { background: #eab308; box-shadow: 0 0 10px #eab308; }
+        .status-light.past { background: #22c55e; box-shadow: 0 0 10px #22c55e; }
 
         .card-content {
             flex: 1;
@@ -177,20 +143,9 @@
             font-weight: 600;
         }
 
-        .status-badge.active {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .status-badge.upcoming {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .status-badge.past {
-            background: #dcfce7;
-            color: #166534;
-        }
+        .status-badge.active { background: #fee2e2; color: #991b1b; }
+        .status-badge.upcoming { background: #fef3c7; color: #92400e; }
+        .status-badge.past { background: #dcfce7; color: #166534; }
 
         .info-row {
             display: flex;
@@ -208,7 +163,8 @@
             margin-top: 2px;
         }
 
-        .loading, .error, .empty {
+        /* Loading & Error States */
+        .loading, .error {
             background: white;
             border-radius: 12px;
             padding: 40px;
@@ -226,15 +182,9 @@
             margin: 0 auto 20px;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        .error {
-            background: #fee2e2;
-            border: 2px solid #f87171;
-            color: #991b1b;
-        }
+        .error { background: #fee2e2; border: 2px solid #f87171; color: #991b1b; }
 
         #outages-container.empty-state::after {
             content: 'No outages found for this filter.';
@@ -246,6 +196,57 @@
             color: #6b7280;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
+
+        /* --- NEW STYLES FOR DISTRICT TAB --- */
+        
+        /* Grid layout for districts */
+        .districts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .card.district-card {
+            flex-direction: column;
+            text-align: center;
+            align-items: center;
+            gap: 10px;
+            padding: 30px;
+            border-left: none; /* We use background tint instead */
+        }
+
+        .district-count {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin: 10px 0;
+        }
+
+        .district-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            opacity: 0.7;
+        }
+
+        /* Severity Colors */
+        /* Green / Safe */
+        .severity-0 { background: #f0fdf4; color: #166534; border: 2px solid #bbf7d0; }
+        .severity-0 .district-count { color: #166534; }
+        
+        /* Yellow / Low */
+        .severity-low { background: #fefce8; color: #854d0e; border: 2px solid #fde047; }
+        .severity-low .district-count { color: #ca8a04; }
+
+        /* Orange / Medium */
+        .severity-medium { background: #fff7ed; color: #9a3412; border: 2px solid #fdba74; }
+        .severity-medium .district-count { color: #ea580c; }
+
+        /* Red / High */
+        .severity-high { background: #fef2f2; color: #991b1b; border: 2px solid #fca5a5; }
+        .severity-high .district-count { color: #dc2626; }
+
     </style>
 </head>
 <body>
@@ -258,7 +259,8 @@
         <div class="filters">
             <button class="filter-btn active" data-filter="active">Active</button>
             <button class="filter-btn" data-filter="upcoming">Upcoming</button>
-            </div>
+            <button class="filter-btn" data-filter="districts">Districts Heatmap</button>
+        </div>
 
         <div id="loading" class="loading">
             <div class="spinner"></div>
@@ -274,14 +276,27 @@
     </div>
 
     <script>
-        // Fetch and display outages
         let allOutages = [];
-        let currentFilter = 'active'; // Default filter is now 'active'
+        let currentFilter = 'active';
+        
+        // Mapping raw API values to Display Names
+        const DISTRICT_MAPPING = {
+            'blackriver': 'Black River',
+            'flacq': 'Flacq',
+            'grandport': 'Grand Port',
+            'moka': 'Moka',
+            'pamplemousses': 'Pamplemousses',
+            'plainewilhems': 'Plaines Wilhems',
+            'portlouis': 'Port Louis',
+            'rivieredurempart': 'Rivière du Rempart',
+            'rodrigues': 'Rodrigues',
+            'savanne': 'Savanne'
+        };
 
         // Fetch and display outages
         async function fetchOutages() {
             try {
-                // The backend call remains the same, but client-side filtering logic below ensures only A/U are rendered/kept
+                // Using your local backend
                 const response = await fetch('http://localhost:3000/api/outages'); 
                 
                 if (!response.ok) {
@@ -289,49 +304,41 @@
                 }
 
                 const data = await response.json();
-                
-                // Filter the data immediately to only keep 'active' and 'upcoming'
                 const fullList = data.outages || [];
 
+                // Filter to only keep Active and Upcoming (Discard past)
                 allOutages = fullList.filter(outage => {
                     const status = getOutageStatus(outage);
                     return status === 'active' || status === 'upcoming';
                 });
                 
-                console.log("Outages received and filtered (Active/Upcoming):", allOutages);
+                console.log("Filtered Outages:", allOutages);
                 
                 document.getElementById('loading').style.display = 'none';
                 
-                // The total count is now the count of Active and Upcoming events
-                const allCountElement = document.querySelector('.filter-btn[data-filter="active"]');
-                if (allCountElement) {
-                   // We don't have an "All" button, so we won't display a count in the buttons initially
-                }
-
-                renderOutages();
+                render();
                 
                 // Update times every minute
                 setInterval(updateAllTimes, 60000);
+
             } catch (err) {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('error').style.display = 'block';
-                document.getElementById('error-message').textContent = 'Failed to load outage data.';
+                document.getElementById('error-message').textContent = 'Failed to load outage data. Ensure your local server is running.';
                 console.error(err);
             }
         }
+
+        // --- Helper Functions ---
 
         function getOutageStatus(outage) {
             const now = new Date();
             const from = new Date(outage.from);
             const to = new Date(outage.to);
             
-            if (now < from) {
-                return 'upcoming';
-            } else if (now >= from && now <= to) {
-                return 'active';
-            } else {
-                return 'past';
-            }
+            if (now < from) return 'upcoming';
+            if (now >= from && now <= to) return 'active';
+            return 'past';
         }
 
         function getTimeMessage(outage) {
@@ -349,20 +356,14 @@
                 const hours = Math.floor(diff / (1000 * 60 * 60));
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 return `Ends in ${hours}h ${minutes}m`;
-            } else {
-                return 'Completed'; // Should be filtered out
             }
+            return 'Completed';
         }
 
         function formatDate(dateStr) {
             const date = new Date(dateStr);
             return date.toLocaleString('en-GB', {
-                weekday: 'long',
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
+                weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit'
             });
         }
 
@@ -375,152 +376,183 @@
             return `${hours}h ${minutes}m`;
         }
 
-        function createOutageCard(outage) {
-            const status = getOutageStatus(outage);
-            const timeMessage = getTimeMessage(outage);
-            
-            return `
-                <div class="card" data-id="${outage.id}" data-status="${status}">
-                    <div class="status-light ${status}"></div>
-                    <div class="card-content">
-                        <div class="card-header">
-                            <h3 class="locality">${outage.locality}</h3>
-                            <span class="status-badge ${status}" data-time-message>${timeMessage}</span>
-                        </div>
-                        
-                        <div class="info-row">
-                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            </svg>
-                            <span>${outage.streets}</span>
-                        </div>
-                        
-                        <div class="info-row">
-                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                            </svg>
-                            <span>Starting time: ${formatDate(outage.from)}</span>
-                        </div>
-                        
-                        <div class="info-row">
-                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <span>Duration: ${getDuration(outage)}</span>
-                        </div>
-                        
-                        <div class="info-row">
-                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <span style="text-transform: capitalize">District: ${outage.district}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
+        // Helper to resolve the proper label from the API slug
+        function getDistrictLabel(rawName) {
+            if (!rawName) return 'Unknown District';
+            const normalized = rawName.toLowerCase().replace(/[^a-z0-9]/g, '');
+            return DISTRICT_MAPPING[normalized] || rawName;
         }
 
-        function renderOutages() {
+        // --- View Rendering Logic ---
+
+        function render() {
             const container = document.getElementById('outages-container');
             
-            // Only render items currently in allOutages (which are Active or Upcoming)
-            container.innerHTML = allOutages.map(outage => createOutageCard(outage)).join('');
-            
-            // Set the active filter to 'active' on initial load, as 'all' is removed
-            if (currentFilter === 'all') {
-                currentFilter = 'active';
+            // Clear previous content
+            container.innerHTML = '';
+            container.className = ''; // Reset classes
+
+            if (currentFilter === 'districts') {
+                renderDistricts(container);
+            } else {
+                renderOutageList(container);
             }
-            
-            applyFilter(currentFilter);
+
+            updateFilterButtons();
         }
 
-        function applyFilter(filter) {
-            currentFilter = filter;
-            const cards = document.querySelectorAll('.card');
-            let visibleCount = 0;
+        // 1. Render Individual Outage Cards (Active/Upcoming)
+        function renderOutageList(container) {
+            const filteredOutages = allOutages.filter(outage => {
+                const status = getOutageStatus(outage);
+                return currentFilter === status;
+            });
+
+            if (filteredOutages.length === 0) {
+                container.classList.add('empty-state');
+                return;
+            }
+
+            container.innerHTML = filteredOutages.map(outage => {
+                const status = getOutageStatus(outage);
+                const timeMessage = getTimeMessage(outage);
+                const displayDistrict = getDistrictLabel(outage.district);
+
+                return `
+                    <div class="card" data-id="${outage.id}" data-status="${status}">
+                        <div class="status-light ${status}"></div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="locality">${outage.locality}</h3>
+                                <span class="status-badge ${status}" data-time-message>${timeMessage}</span>
+                            </div>
+                            <div class="info-row">
+                                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span>${outage.streets}</span>
+                            </div>
+                            <div class="info-row">
+                                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <span>Starting: ${formatDate(outage.from)}</span>
+                            </div>
+                            <div class="info-row">
+                                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span>Duration: ${getDuration(outage)}</span>
+                            </div>
+                            <div class="info-row">
+                                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span>${displayDistrict}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 2. Render Districts Heatmap (ACTIVE ONLY)
+        function renderDistricts(container) {
+            // Group outages by district using the exact keys
+            const districtCounts = {};
             
-            cards.forEach(card => {
-                const status = card.dataset.status;
-                
-                // Now 'all' simply means showing everything in the filtered list (Active or Upcoming)
-                if (filter === 'active' && status === 'active') {
-                    card.classList.remove('hidden');
-                    visibleCount++;
-                } else if (filter === 'upcoming' && status === 'upcoming') {
-                    card.classList.remove('hidden');
-                    visibleCount++;
-                } else if (filter === 'all') {
-                    // 'all' is removed, but we keep this branch for safety if logic changes
-                    card.classList.remove('hidden');
-                    visibleCount++;
-                } else {
-                    card.classList.add('hidden');
-                }
+            // Initialize counts for all known districts to 0
+            Object.keys(DISTRICT_MAPPING).forEach(key => {
+                districtCounts[key] = 0;
             });
             
-            // Update filter buttons
+            allOutages.forEach(outage => {
+                // Only count ACTIVE outages for the heatmap
+                if (getOutageStatus(outage) === 'active' && outage.district) {
+                    // Normalize API input to match keys (remove spaces, lowercase)
+                    const rawDist = outage.district.toLowerCase().replace(/[^a-z0-9]/g, '');
+                    
+                    if (districtCounts.hasOwnProperty(rawDist)) {
+                        districtCounts[rawDist]++;
+                    }
+                }
+            });
+
+            // Create grid container
+            const grid = document.createElement('div');
+            grid.className = 'districts-grid';
+
+            // Prepare data and sort by count (Highest first)
+            const sortedDistricts = Object.entries(DISTRICT_MAPPING)
+                .map(([key, label]) => ({
+                    key,
+                    label,
+                    count: districtCounts[key]
+                }))
+                .sort((a, b) => b.count - a.count);
+
+            // Render sorted districts
+            grid.innerHTML = sortedDistricts.map(({ key, label, count }) => {
+                // Determine Severity Color Class
+                let severityClass = 'severity-0';
+                if (count >= 5) severityClass = 'severity-high';      // Very Red
+                else if (count >= 3) severityClass = 'severity-medium'; // Orange
+                else if (count >= 1) severityClass = 'severity-low';    // Yellow
+                
+                return `
+                    <div class="card district-card ${severityClass}">
+                        <h3 class="locality" style="font-size: 1.2rem;">${label}</h3>
+                        <div class="district-count">${count}</div>
+                        <div class="district-label">Active Outages</div>
+                    </div>
+                `;
+            }).join('');
+
+            container.appendChild(grid);
+        }
+
+        function updateFilterButtons() {
             document.querySelectorAll('.filter-btn').forEach(btn => {
-                if (btn.dataset.filter === filter) {
+                if (btn.dataset.filter === currentFilter) {
                     btn.classList.add('active');
                 } else {
                     btn.classList.remove('active');
                 }
             });
+        }
+
+        // --- Updates & Events ---
+
+        function updateAllTimes() {
+            // Don't refresh the DOM if we are in Districts view, just data check
+            if (currentFilter === 'districts') return;
+
+            let needsRender = false;
             
-            // Show/hide empty state
-            const container = document.getElementById('outages-container');
-            if (visibleCount === 0) {
-                container.classList.add('empty-state');
+            // Simple check: remove past events from memory
+            const activeUpcoming = allOutages.filter(o => getOutageStatus(o) !== 'past');
+            
+            if (activeUpcoming.length !== allOutages.length) {
+                allOutages = activeUpcoming;
+                needsRender = true;
+            }
+
+            if (needsRender) {
+                render();
             } else {
-                container.classList.remove('empty-state');
+                // Update text times only
+                document.querySelectorAll('.card[data-id]').forEach(card => {
+                    const id = parseInt(card.dataset.id);
+                    const outage = allOutages.find(o => o.id === id);
+                    if (outage) {
+                        const newStatus = getOutageStatus(outage);
+                        const timeMsg = getTimeMessage(outage);
+                        
+                        card.dataset.status = newStatus;
+                        card.querySelector('.status-light').className = `status-light ${newStatus}`;
+                        card.querySelector('.status-badge').className = `status-badge ${newStatus}`;
+                        card.querySelector('.status-badge').textContent = timeMsg;
+                    }
+                });
             }
         }
 
-        function updateAllTimes() {
-            let updatedOutages = [];
-            
-            // Iterate over current outages to check status and filter out newly "past" ones
-            allOutages.forEach(outage => {
-                const newStatus = getOutageStatus(outage);
-                
-                if (newStatus !== 'past') {
-                    updatedOutages.push(outage); // Keep active or upcoming
-                    
-                    const card = document.querySelector(`[data-id="${outage.id}"]`);
-                    if (!card) return;
-                    
-                    const timeMessage = getTimeMessage(outage);
-                    
-                    // Update card status and styling
-                    card.dataset.status = newStatus;
-                    
-                    const light = card.querySelector('.status-light');
-                    light.className = `status-light ${newStatus}`;
-                    
-                    const badge = card.querySelector('[data-time-message]');
-                    badge.className = `status-badge ${newStatus}`;
-                    badge.textContent = timeMessage;
-                } else {
-                    // If an outage just became 'past', remove its card from the DOM
-                    const card = document.querySelector(`[data-id="${outage.id}"]`);
-                    if (card) {
-                        card.remove();
-                    }
-                }
-            });
-
-            // Update the main list with only Active and Upcoming events
-            allOutages = updatedOutages;
-            
-            // Re-apply filter to handle any status changes that affect visibility
-            applyFilter(currentFilter);
-        }
-
-        // Event listeners
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                applyFilter(btn.dataset.filter);
+                currentFilter = btn.dataset.filter;
+                render();
             });
         });
 
