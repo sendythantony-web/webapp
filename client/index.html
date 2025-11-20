@@ -285,34 +285,44 @@
   </div>
 
   <script>
-    let allOutages = [];
-    let currentFilter = 'all';
 
     // Fetch and display outages
-    async function fetchOutages() {
-      try {
-        const response = await fetch('https://raw.githubusercontent.com/MrSunshyne/mauritius-dataset-electricity/main/data/power-outages.json');
-        const data = await response.json();
-        
-        // Flatten all districts into single array
-        allOutages = Object.values(data).flat();
-        
-        // Sort by date
-        allOutages.sort((a, b) => new Date(a.from) - new Date(b.from));
-        
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('count-all').textContent = allOutages.length;
-        
-        renderOutages();
-        
-        // Update times every minute
-        setInterval(updateAllTimes, 60000);
-      } catch (err) {
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('error').style.display = 'block';
-        document.getElementById('error-message').textContent = 'Failed to load outage data';
+   let allOutages = [];
+  let currentFilter = 'all';
+
+  // Fetch and display outages
+  async function fetchOutages() {
+    try {
+      const response = await fetch('http://localhost:3000/api/outages'); 
+      
+      if (!response.ok) {
+          throw new Error(`Server returned status: ${response.status}`);
       }
+
+      const data = await response.json();
+      
+      // The data is now pre-processed (flattened AND SORTED) by the backend!
+      allOutages = data.outages; // Note: Assign to the global 'allOutages' variable
+      
+      console.log("Outages received, flattened, and sorted by backend:", allOutages);
+      
+      // 🚨 REMOVE SORTING LOGIC HERE:
+      // allOutages.sort((a, b) => new Date(a.from) - new Date(b.from));
+      
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('count-all').textContent = allOutages.length;
+      
+      renderOutages();
+      
+      // Update times every minute
+      setInterval(updateAllTimes, 60000);
+    } catch (err) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').style.display = 'block';
+      document.getElementById('error-message').textContent = 'Failed to load outage data';
+      console.error(err);
     }
+  }
 
     function getOutageStatus(outage) {
       const now = new Date();
