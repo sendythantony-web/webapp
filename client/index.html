@@ -19,7 +19,7 @@
 
     body {
       margin: 0;
-      background: #f4f6fb;
+      background: #eccaa5ba;
       color: #222;
       /*line-height: 1.6;*/
     }
@@ -70,42 +70,25 @@
       font-weight: 500;
     }
 
-    nav {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
+    nav { display: flex; gap: 10px; align-items: center; }
 
     nav a {
-      color: #e0e6ed;
-      background: rgba(255,255,255,0.05);
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 0.9em;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      border: 1px solid transparent;
+      color: #e0e6ed; background: rgba(255,255,255,0.05); padding: 8px 16px;
+      border-radius: 8px; font-size: 0.9em; font-weight: 600; text-decoration: none;
+      transition: all 0.3s ease; border: 1px solid transparent;
     }
 
     nav a:hover {
-      background: rgba(255, 140, 0, 0.15);
-      color: var(--safety-orange);
+      background: rgba(255, 140, 0, 0.15); color: var(--safety-orange);
       border-color: var(--safety-orange);
     }
 
-    @media (max-width: 768px) {
-      .header-content {
-        flex-direction: column;
-        text-align: center;
-        gap: 15px;
-      }
-      nav {
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
+    .lang-btn {
+      background: var(--safety-orange); color: white; border: none; padding: 8px 12px;
+      border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.85em;
+      margin-left: 15px; transition: 0.2s;
     }
+    .lang-btn:hover { background: #e07b00; }
 
     /* =============================== PAGE CONTENT ============================== */
 
@@ -481,9 +464,10 @@
       </div>
 
       <nav>
-        <a href="index.html" onclick="scrollToSection('home'); return false;">Home</a>
-        <a href="outage.html">Outages</a>
-        <a href="education6.html">EduHub</a>
+        <a href="index.html" data-i18n="navTips">Home</a>
+        <a href="outage.html" data-i18n="navQuiz">Outage Status</a>
+        <a href="education6.html" data-i18n="navSim">Education Hub</a>
+        <button class="lang-btn" onclick="toggleLanguage()">FR | EN</button>
       </nav>
     </div>
   </header>
@@ -570,8 +554,7 @@
             <img src="powerOutage2.jpg" alt="Technicians working on power lines">
             <div class="learn-content">
               <div class="learn-tag">Outage Alerts &amp; Maps</div>
-              <div class="learn-title">
-                <a href="outage.html">Check Planned Outages</a></div>
+              <div class="learn-title">Check Planned Outages</div>
             </div>
           </div>
 
@@ -603,13 +586,12 @@
 
     // Placeholder navigation for future separate pages
     function goToOutages() {
-      // window.location.href = "outages.html";
-      alert("Outages page coming soon.");
+      window.location.href = "outage.html";
+
     }
 
     function goToEducation() {
-      // window.location.href = "education.html";
-      alert("Education hub coming soon.");
+      window.location.href = "education6.html";
     }
 
     // ---- Utility: Fisher–Yates shuffle ----
